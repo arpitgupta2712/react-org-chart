@@ -13,6 +13,7 @@ export interface RawEmployee {
   phone: string;
   date_of_joining: string;
   reporting_to: string | null;
+  company_billed_to: string; // 🏢 Company the employee is billed to
 }
 
 export class EmployeeDataLoader {

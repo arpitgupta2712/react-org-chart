@@ -4,6 +4,49 @@ import { Employee, getHierarchyLabel } from '../types'
 import { RawEmployee } from '../services/dataLoader'
 import { colors, sizes, getTierColors } from '../constants/colors'
 
+// 🎨 Modern SVG Icons
+const PhoneIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+  </svg>
+)
+
+const EmailIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+  </svg>
+)
+
+const CalendarIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+  </svg>
+)
+
+const BuildingIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+  </svg>
+)
+
+const UserIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+  </svg>
+)
+
+const TeamIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M16 5c0-1.66-1.34-3-3-3S10 3.34 10 5s1.34 3 3 3 3-1.34 3-3zM9 8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm6 0c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zm0 7c-2.66 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4zM9 15c-2.66 0-8 1.34-8 4v3h7v-3c0-1.46 1.47-2.73 3.5-3.5-.17-.17-.36-.34-.65-.5H9z"/>
+  </svg>
+)
+
+const CrownIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 6L9.5 9 7 6 4.5 9 2 6v12h20V6l-2.5 3L17 6l-2.5 3L12 6zm0 3.5L14.5 12 12 17.5 9.5 12 12 9.5z"/>
+  </svg>
+)
+
 interface EmployeeCardProps {
   employee: Employee
   rawEmployee?: RawEmployee
@@ -36,7 +79,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
 }) => {
   
   const {
-    showSalary = true,
+    showSalary = false, // 💰 Salary not shown by default (as requested)
     showPhone = true,
     showReports = true,
     showTier = true,
@@ -57,15 +100,24 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
     setIsFlipped(!isFlipped)
   }
 
-  const formatPhone = () => {
-    if (!rawEmployee?.phone) {
-      return <span className="no-data">No phone</span>
+  const formatPhone = (phone: string) => {
+    if (!phone) return 'No phone available'
+    // Format: +91 88618 64426 or similar
+    const cleaned = phone.replace(/\D/g, '')
+    if (cleaned.length === 10) {
+      return `${cleaned.slice(0, 5)} ${cleaned.slice(5)}`
     }
-    return (
-      <a href={`tel:${rawEmployee.phone}`} className="phone-link">
-        {rawEmployee.phone}
-      </a>
-    )
+    return phone
+  }
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'Not specified'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    })
   }
 
   const handleCardClick = () => {
@@ -101,46 +153,67 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       <FlipContainer isFlipped={isFlipped}>
         {/* FRONT OF CARD */}
         <CardFront>
-          {/* Card Header */}
+      {/* Card Header */}
           <CardHeader>
-            <EmployeeName>{employee.name}</EmployeeName>
+            <EmployeeInfo>
+              <EmployeeName>{employee.name}</EmployeeName>
+              {rawEmployee?.phone && (
+                <EmployeeSubtitle>
+                  <PhoneIcon />
+                  <a href={`tel:${rawEmployee.phone}`}>
+                    {formatPhone(rawEmployee.phone)}
+                  </a>
+                </EmployeeSubtitle>
+              )}
+            </EmployeeInfo>
             <EmployeeId>
-              {rawEmployee?.company_id || employee.id}
+          {rawEmployee?.company_id || employee.id}
             </EmployeeId>
           </CardHeader>
 
-          {/* Card Body */}
+      {/* Card Body */}
           <CardBody>
             <EmployeeTitle>{employee.position}</EmployeeTitle>
-            
-            {/* Employee Details */}
+        
+        {/* Employee Details */}
             <EmployeeDetails>
-              {showPhone && (
+              {rawEmployee?.company_email_id && (
                 <DetailRow>
-                  <DetailLabel>Phone:</DetailLabel>
-                  <DetailValue>{formatPhone()}</DetailValue>
+                  <DetailLabel><EmailIcon /> Email:</DetailLabel>
+                  <DetailValue>
+                    <a href={`mailto:${rawEmployee.company_email_id}`}>
+                      {rawEmployee.company_email_id}
+                    </a>
+                  </DetailValue>
                 </DetailRow>
               )}
               
-              {showSalary && rawEmployee?.salary_package && (
+              {rawEmployee?.date_of_joining && (
                 <DetailRow>
-                  <DetailLabel>Salary:</DetailLabel>
+                  <DetailLabel><CalendarIcon /> Joined:</DetailLabel>
+                  <DetailValue>{formatDate(rawEmployee.date_of_joining)}</DetailValue>
+                </DetailRow>
+              )}
+              
+              {rawEmployee?.company_billed_to && (
+                <DetailRow>
+                  <DetailLabel><BuildingIcon /> Company:</DetailLabel>
                   <DetailValue>
-                    ₹{rawEmployee.salary_package.toLocaleString()}
+                    <CompanyTag>{rawEmployee.company_billed_to}</CompanyTag>
                   </DetailValue>
                 </DetailRow>
               )}
               
               {showTier && (
                 <DetailRow>
-                  <DetailLabel>Tier:</DetailLabel>
+                  <DetailLabel><CrownIcon /> Tier:</DetailLabel>
                   <DetailValue>{getTierName(employee.tier)}</DetailValue>
                 </DetailRow>
-              )}
-              
-              {showManager && employee.parentId && managerName && (
+          )}
+          
+          {showManager && employee.parentId && managerName && (
                 <DetailRow>
-                  <DetailLabel>Reports to:</DetailLabel>
+                  <DetailLabel><UserIcon /> Reports to:</DetailLabel>
                   <DetailValue>{managerName}</DetailValue>
                 </DetailRow>
               )}
@@ -151,7 +224,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
           {showReports && hasReports && (
             <TeamSummary>
               <TeamCount>
-                👥 {employee.children.length} direct report{employee.children.length !== 1 ? 's' : ''}
+                <TeamIcon /> {employee.children.length} direct report{employee.children.length !== 1 ? 's' : ''}
               </TeamCount>
               <FlipButton onClick={handleFlipCard}>
                 View Team →
@@ -164,7 +237,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         <CardBack>
           <BackHeader>
             <BackTitle>
-              {employee.name}'s Team
+              <CrownIcon /> {employee.name}'s Team
             </BackTitle>
             <FlipButton onClick={handleFlipCard}>
               ← Back
@@ -179,7 +252,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
             <TeamList>
               {employee.children.map((child, index) => (
                 <TeamMember 
-                  key={child.id}
+                    key={child.id}
                   onClick={(e) => handleTeamMemberClick(child, e)}
                   title={`Navigate to ${child.name}`}
                 >
@@ -303,18 +376,46 @@ const CardHeader = styled.div`
   z-index: 1;
 `
 
+const EmployeeInfo = styled.div`
+  flex: 1;
+  margin-right: ${sizes.spaceMD};
+`
+
 const EmployeeName = styled.div`
   font-size: ${sizes.employeeName};
   font-weight: 800;
   line-height: 1.2;
-  flex: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  margin-right: ${sizes.spaceMD};
+  margin-bottom: ${sizes.spaceXS};
   
   /* Add a subtle highlight */
   background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
   background-clip: text;
   -webkit-background-clip: text;
+`
+
+const EmployeeSubtitle = styled.div`
+  font-size: ${sizes.fontSM};
+  font-weight: 600;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: ${sizes.spaceXS};
+  
+  svg {
+    opacity: 0.8;
+  }
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+  }
 `
 
 const EmployeeId = styled.div`
@@ -389,41 +490,25 @@ const DetailLabel = styled.span`
   opacity: 0.85;
   display: flex;
   align-items: center;
+  gap: ${sizes.spaceXS};
   
-  /* Add icons based on content */
-  &::before {
-    content: '📱';
-    margin-right: ${sizes.spaceXS};
-    font-size: 0.9em;
+  svg {
+    opacity: 0.7;
+    flex-shrink: 0;
   }
-  
-  /* Phone label */
-  ${props => props.children === 'Phone:' && `
-    &::before {
-      content: '📱';
-    }
-  `}
-  
-  /* Salary label */
-  ${props => props.children === 'Salary:' && `
-    &::before {
-      content: '💰';
-    }
-  `}
-  
-  /* Tier label */
-  ${props => props.children === 'Tier:' && `
-    &::before {
-      content: '🏆';
-    }
-  `}
-  
-  /* Reports to label */
-  ${props => props.children === 'Reports to:' && `
-    &::before {
-      content: '👤';
-    }
-  `}
+`
+
+const CompanyTag = styled.span`
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: ${sizes.spaceXS} ${sizes.spaceSM};
+  border-radius: 0.75rem;
+  font-size: ${sizes.fontXS};
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `
 
 const DetailValue = styled.span`
@@ -510,11 +595,10 @@ const TeamCount = styled.div`
   opacity: 0.95;
   display: flex;
   align-items: center;
+  gap: ${sizes.spaceSM};
   
-  &::before {
-    content: '👥';
-    margin-right: ${sizes.spaceSM};
-    font-size: 1.2em;
+  svg {
+    opacity: 0.8;
   }
 `
 
@@ -573,11 +657,10 @@ const BackTitle = styled.h3`
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
+  gap: ${sizes.spaceSM};
   
-  &::before {
-    content: '👑';
-    margin-right: ${sizes.spaceSM};
-    font-size: 1.2em;
+  svg {
+    opacity: 0.8;
   }
 `
 

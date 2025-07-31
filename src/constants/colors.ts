@@ -108,7 +108,7 @@ export const design = {
   card: {
     padding: '2.5rem',
     borderRadius: '1.5rem',
-    minHeight: '22rem',
+    minHeight: '28rem',
     gap: '2.5rem',
     borderWidth: '3px',
   },
