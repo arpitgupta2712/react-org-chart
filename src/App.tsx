@@ -1,14 +1,12 @@
 import React from 'react'
 import OrgChart from './components/OrgChart'
+import { AppHeader } from './components/AppHeader'
 import './App.css'
 
 function App() {
   return (
     <div className="app">
-      <header className="page-header">
-        <h1>GoalTech Organizational Chart</h1>
-        <p className="company-info">Modern React + TypeScript | Real Employee Data</p>
-      </header>
+      <AppHeader />
       
       <main className="main-content">
         <OrgChart />

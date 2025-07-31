@@ -2,58 +2,40 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
-
-.page-header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: var(--page-header-padding);
-  margin: var(--page-header-margin);
-  border-radius: var(--page-header-border-radius);
-  box-shadow: var(--shadow-page-header);
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.page-header h1 {
-  font-size: var(--page-title-size);
-  font-weight: var(--page-title-weight);
-  color: var(--color-neutral-950);
-  margin-bottom: var(--space-2);
-}
-
-.page-header .company-info {
-  font-size: var(--page-subtitle-size);
-  color: var(--color-neutral-700);
-  font-weight: var(--font-medium);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .main-content {
   flex: 1;
-  margin: 0 var(--page-header-margin) var(--page-header-margin);
-  background: var(--bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  margin: 0 1.5rem 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  
+  /* Subtle pattern overlay matching other components */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+    pointer-events: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    margin: var(--page-header-margin-mobile);
-    padding: var(--page-header-padding-mobile);
-  }
-  
-  .page-header h1 {
-    font-size: var(--text-xl);
-  }
-  
-  .page-header .company-info {
-    font-size: var(--text-sm);
-  }
-  
   .main-content {
-    margin: 0 var(--page-header-margin-mobile) var(--page-header-margin-mobile);
+    margin: 0 1rem 1rem;
   }
 }

@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react'
 import { useEmployeeData } from '../../hooks/useEmployeeData'
 import { useEmployeeFiltering } from '../../hooks/useEmployeeFiltering'
-import { useEmployeeStats } from '../../hooks/useEmployeeStats'
+
 import { useEmployeeSelection } from '../../hooks/useEmployeeSelection'
 import { Controls } from './components/Controls'
-import { StatsDisplay } from './components/StatsDisplay'
 import { LoadingStateComponent } from './components/LoadingStateComponent'
 import { ErrorStateComponent } from './components/ErrorStateComponent'
 import { EmployeeGridComponent } from './components/EmployeeGridComponent'
@@ -45,8 +44,7 @@ const OrgChart: React.FC = () => {
     getAllSubordinates
   } = useEmployeeSelection(employees)
 
-  // Statistics
-  const stats = useEmployeeStats(employees, filteredEmployees, rawEmployees)
+  // Statistics (removed - redundant with controls data)
 
   // Calculate employee counts for filter options
   const employeeCounts = useMemo(() => {
@@ -57,19 +55,7 @@ const OrgChart: React.FC = () => {
     return counts
   }, [employees])
 
-  // Action handlers
-  const handleExpandAll = () => {
-    // This would need to be implemented with state management for each card
-    // For now, just log the action
-    console.log('📖 Expand all requested')
-  }
-
-  const handleCollapseAll = () => {
-    // This would need to be implemented with state management for each card
-    // For now, just log the action
-    console.log('📕 Collapse all requested')
-  }
-
+  // Reset handler
   const handleReset = () => {
     resetFilters()
     resetSelection()
@@ -106,12 +92,8 @@ const OrgChart: React.FC = () => {
         designations={designations}
         tiers={tiers}
         employeeCounts={employeeCounts}
-        onExpandAll={handleExpandAll}
-        onCollapseAll={handleCollapseAll}
         onReset={handleReset}
       />
-
-      <StatsDisplay stats={stats} />
 
       <EmployeeGridComponent
         employees={filteredEmployees}

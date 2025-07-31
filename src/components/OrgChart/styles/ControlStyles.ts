@@ -39,9 +39,11 @@ export const ControlsHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: ${sizes.spaceLG} ${sizes.spaceXL};
-  background: rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   min-height: 60px;
+  backdrop-filter: blur(10px);
+  gap: ${sizes.spaceLG};
   
   @media (max-width: 768px) {
     padding: ${sizes.spaceMD} ${sizes.spaceLG};
@@ -63,24 +65,7 @@ export const ControlsContent = styled.div<{ isExpanded: boolean }>`
   }
 `
 
-export const QuickStats = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${sizes.spaceSM};
-  font-size: ${sizes.fontSM};
-  font-weight: 600;
-  color: ${colors.textPrimary};
-  
-  span {
-    white-space: nowrap;
-  }
-  
-  @media (max-width: 768px) {
-    font-size: ${sizes.fontXS};
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-`
+
 
 export const ToggleButton = styled.button<{ isExpanded: boolean }>`
   padding: ${sizes.spaceSM} ${sizes.spaceLG};
@@ -247,40 +232,7 @@ export const SearchInput = styled.input`
   }
 `
 
-export const ActionButton = styled.button`
-  padding: ${sizes.spaceSM} ${sizes.spaceMD};
-  background: linear-gradient(135deg, ${colors.selectedBorder} 0%, ${colors.highlightBorder} 100%);
-  color: white;
-  border: none;
-  border-radius: ${sizes.spaceSM};
-  font-size: ${sizes.fontSM};
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 44px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  
-  &:hover {
-    background: linear-gradient(135deg, ${colors.highlightBorder} 0%, ${colors.selectedBorder} 100%);
-    transform: translateY(-1px);
-    box-shadow: 
-      0 6px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-  
-  &:active {
-    transform: translateY(0);
-    box-shadow: 
-      0 2px 8px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-`
+
 
 export const ResetButton = styled.button`
   padding: ${sizes.spaceSM} ${sizes.spaceMD};
