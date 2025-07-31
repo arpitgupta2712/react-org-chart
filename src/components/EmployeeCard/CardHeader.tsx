@@ -7,7 +7,6 @@ import {
   CardHeader as StyledCardHeader,
   EmployeeInfo,
   HeaderRight,
-  TierBadge,
   EmployeeName,
   EmployeeSubtitle,
   EmployeeId
@@ -20,10 +19,6 @@ interface CardHeaderProps {
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({ employee, rawEmployee }) => {
-  const getTierName = (tier: number): string => {
-    return getHierarchyLabel(tier)
-  }
-
   return (
     <StyledCardHeader>
       <EmployeeInfo>
@@ -40,9 +35,6 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ employee, rawEmployee })
         </EmployeeSubtitle>
       </EmployeeInfo>
       <HeaderRight>
-        <TierBadge tier={employee.tier}>
-          {getTierName(employee.tier)}
-        </TierBadge>
         <EmployeeId>
           {rawEmployee?.company_id || employee.id}
         </EmployeeId>

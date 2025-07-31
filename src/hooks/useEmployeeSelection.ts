@@ -6,7 +6,6 @@ export interface UseEmployeeSelectionReturn {
   highlightedEmployeeId: string | null
   showingSubordinatesForId: string | null
   handleCardClick: (employee: Employee) => void
-  handleReportClick: (employee: Employee) => void
   resetSelection: () => void
   getAllSubordinates: (employeeId: string) => Set<string>
 }
@@ -52,21 +51,7 @@ export const useEmployeeSelection = (employees: Employee[]): UseEmployeeSelectio
     console.log(`👤 Selected: ${employee.name}`)
   }
 
-  const handleReportClick = (employee: Employee) => {
-    // When clicking on a team member, both highlight and select them for visibility
-    setHighlightedEmployeeId(employee.id)
-    setSelectedEmployeeId(employee.id)
-    setShowingSubordinatesForId(null) // Clear subordinate view
-    console.log(`🎯 Navigated to: ${employee.name}`)
-    
-    // Scroll to employee
-    setTimeout(() => {
-      const element = document.querySelector(`[data-employee-id="${employee.id}"]`)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
-    }, 100)
-  }
+
 
   const resetSelection = () => {
     setSelectedEmployeeId(null)
@@ -79,7 +64,6 @@ export const useEmployeeSelection = (employees: Employee[]): UseEmployeeSelectio
     highlightedEmployeeId,
     showingSubordinatesForId,
     handleCardClick,
-    handleReportClick,
     resetSelection,
     getAllSubordinates
   }

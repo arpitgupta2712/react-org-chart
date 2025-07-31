@@ -5,7 +5,7 @@ export const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: ${sizes.spaceLG};
+  margin-bottom: ${sizes.spaceMD};
   position: relative;
   z-index: 1;
 `
@@ -19,7 +19,7 @@ export const HeaderRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: ${sizes.spaceSM};
+  justify-content: center;
 `
 
 export const TierBadge = styled.div<{ tier: number }>`

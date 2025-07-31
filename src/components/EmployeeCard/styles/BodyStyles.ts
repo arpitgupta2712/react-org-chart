@@ -10,7 +10,7 @@ export const CardBody = styled.div`
 export const EmployeeTitle = styled.div`
   font-size: ${sizes.employeeTitle};
   font-weight: 700;
-  margin-bottom: ${sizes.spaceXL};
+  margin-bottom: ${sizes.spaceLG};
   line-height: 1.3;
   opacity: 0.95;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -41,7 +41,7 @@ export const DetailRow = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: ${sizes.employeeDetails};
-  padding: ${sizes.spaceSM} 0;
+  padding: ${sizes.spaceXS} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   
   &:last-child {
@@ -85,15 +85,17 @@ export const DetailValue = styled.span`
   }
 `
 
-export const CompanyTag = styled.span`
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: ${sizes.spaceXS} ${sizes.spaceSM};
-  border-radius: 0.75rem;
-  font-size: ${sizes.fontXS};
+export const ExecutiveStatus = styled.span`
   font-weight: 700;
-  text-transform: uppercase;
+  color: inherit;
+  text-align: center;
+  display: block;
+  width: 100%;
+  font-style: italic;
   letter-spacing: 0.5px;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  font-size: 0.85em;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `
+

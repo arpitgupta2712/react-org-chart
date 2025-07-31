@@ -24,7 +24,7 @@ export const StyledEmployeeCard = styled.div<{
     return tierColors.border;
   }};
   border-radius: ${sizes.cardBorderRadius};
-  padding: ${props => props.compact ? '2rem' : sizes.cardPadding};
+  padding: ${props => props.compact ? '1.5rem' : '2rem'};
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -110,5 +110,95 @@ export const MissingData = styled.span`
 
   &:hover {
     opacity: 0.9;
+  }
+`
+
+// 🏷️ Tier Header - dedicated space at top of card
+export const TierHeader = styled.div<{ tier: number }>`
+  background: ${props => {
+    const tierColors = getTierColors(props.tier);
+    return `linear-gradient(135deg, ${tierColors.border} 0%, rgba(0, 0, 0, 0.8) 100%)`;
+  }};
+  color: rgba(255, 255, 255, 0.95);
+  padding: 0.75rem 1.5rem;
+  margin: -2rem -2rem 1.5rem -2rem; /* Negative margins to extend to card edges */
+  border-radius: ${sizes.cardBorderRadius} ${sizes.cardBorderRadius} 0 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+  
+  /* Add subtle pattern */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 25%, transparent 25%);
+    background-size: 8px 8px;
+    border-radius: ${sizes.cardBorderRadius} ${sizes.cardBorderRadius} 0 0;
+  }
+  
+  /* Content should be above pattern */
+  span {
+    position: relative;
+    z-index: 1;
+  }
+`
+
+// 🏢 Company Footer - dedicated space at bottom of card (reverse of tier header)
+export const CompanyFooter = styled.div<{ tier: number }>`
+  background: ${props => {
+    const tierColors = getTierColors(props.tier);
+    return `linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, ${tierColors.background} 100%)`;
+  }};
+  color: ${props => {
+    const tierColors = getTierColors(props.tier);
+    return tierColors.text;
+  }};
+  padding: 0.75rem 1.5rem;
+  margin: 1.5rem -2rem -2rem -2rem; /* Negative margins to extend to card edges */
+  border-radius: 0 0 ${sizes.cardBorderRadius} ${sizes.cardBorderRadius};
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  box-shadow: 
+    0 -2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+  
+  /* Add subtle reverse pattern */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%);
+    background-size: 8px 8px;
+    border-radius: 0 0 ${sizes.cardBorderRadius} ${sizes.cardBorderRadius};
+  }
+  
+  /* Content should be above pattern */
+  span {
+    position: relative;
+    z-index: 1;
   }
 `

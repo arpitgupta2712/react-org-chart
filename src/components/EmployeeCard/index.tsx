@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import { Employee } from '../../types'
+import React from 'react'
+import { Employee, getHierarchyLabel } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
-import { FlipCard } from './FlipCard'
-import { StyledEmployeeCard } from './styles/CardStyles'
+import { CardHeader } from './CardHeader'
+import { CardBody } from './CardBody'
+import { StyledEmployeeCard, TierHeader, CompanyFooter } from './styles/CardStyles'
 
 interface EmployeeCardProps {
   employee: Employee
@@ -17,7 +18,6 @@ interface EmployeeCardProps {
   }
   managerName?: string
   onCardClick?: (employee: Employee) => void
-  onReportClick?: (employee: Employee) => void
   isSelected?: boolean
   isHighlighted?: boolean
   isDimmed?: boolean
@@ -29,7 +29,6 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   config = {},
   managerName,
   onCardClick,
-  onReportClick,
   isSelected = false,
   isHighlighted = false,
   isDimmed = false
@@ -45,23 +44,10 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   } = config
 
   const hasReports = employee.children.length > 0
-  const [isFlipped, setIsFlipped] = useState(false)
-
-  const handleFlipCard = (e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent triggering the main card click
-    setIsFlipped(!isFlipped)
-  }
 
   const handleCardClick = () => {
     if (onCardClick) {
       onCardClick(employee)
-    }
-  }
-
-  const handleTeamMemberClick = (reportEmployee: Employee, e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent triggering card click
-    if (onReportClick) {
-      onReportClick(reportEmployee)
     }
   }
 
@@ -80,15 +66,26 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       data-tier={employee.tier}
       onClick={handleCardClick}
     >
-      <FlipCard
-        employee={employee}
-        rawEmployee={rawEmployee}
+      {/* 🏷️ Tier Header - dedicated space at top of card */}
+      <TierHeader tier={employee.tier}>
+        <span>{getHierarchyLabel(employee.tier)}</span>
+      </TierHeader>
+      
+      {/* Card Content */}
+      <CardHeader employee={employee} rawEmployee={rawEmployee} />
+      <CardBody 
+        employee={employee} 
+        rawEmployee={rawEmployee} 
         managerName={managerName}
-        isFlipped={isFlipped}
-        config={{ showReports, showManager }}
-        onFlipCard={handleFlipCard}
-        onTeamMemberClick={handleTeamMemberClick}
+        showManager={showManager}
       />
+      
+      {/* 🏢 Company Footer - dedicated space at bottom of card */}
+      <CompanyFooter tier={employee.tier}>
+        <span>
+          {rawEmployee?.company_billed_to || 'No Company Assigned'}
+        </span>
+      </CompanyFooter>
     </StyledEmployeeCard>
   )
 }

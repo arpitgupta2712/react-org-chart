@@ -38,7 +38,6 @@ const OrgChart: React.FC = () => {
     highlightedEmployeeId,
     showingSubordinatesForId,
     handleCardClick,
-    handleReportClick,
     resetSelection,
     getAllSubordinates
   } = useEmployeeSelection(employees)
@@ -113,7 +112,6 @@ const OrgChart: React.FC = () => {
         getRawEmployee={getRawEmployee}
         getManagerName={getManagerName}
         onCardClick={handleCardClick}
-        onReportClick={handleReportClick}
         selectedEmployeeId={selectedEmployeeId}
         highlightedEmployeeId={highlightedEmployeeId}
         showingSubordinatesForId={showingSubordinatesForId}

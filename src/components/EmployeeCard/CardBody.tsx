@@ -1,7 +1,7 @@
 import React from 'react'
 import { Employee } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
-import { EmailIcon, CalendarIcon, BuildingIcon, UserIcon } from '../icons'
+import { EmailIcon, CalendarIcon, UserIcon, ShieldIcon } from '../icons'
 import { formatDate } from '../../utils/formatters'
 import {
   CardBody as StyledCardBody,
@@ -10,7 +10,7 @@ import {
   DetailRow,
   DetailLabel,
   DetailValue,
-  CompanyTag
+  ExecutiveStatus
 } from './styles/BodyStyles'
 import { MissingData } from './styles/CardStyles'
 
@@ -58,24 +58,23 @@ export const CardBody: React.FC<CardBodyProps> = ({
           </DetailValue>
         </DetailRow>
         
-        {/* Company - Always show */}
-        <DetailRow>
-          <DetailLabel><BuildingIcon /> Company:</DetailLabel>
-          <DetailValue>
-            {rawEmployee?.company_billed_to ? (
-              <CompanyTag>{rawEmployee.company_billed_to}</CompanyTag>
-            ) : (
-              <MissingData>No company assigned</MissingData>
-            )}
-          </DetailValue>
-        </DetailRow>
-        
-        {/* Manager */}
-        {showManager && employee.parentId && managerName && (
-          <DetailRow>
-            <DetailLabel><UserIcon /> Reports to:</DetailLabel>
-            <DetailValue>{managerName}</DetailValue>
-          </DetailRow>
+        {/* Manager/Authority - Always show for consistent card height */}
+        {showManager && (
+          employee.parentId && managerName ? (
+            <DetailRow>
+              <DetailLabel><UserIcon /> Reports to:</DetailLabel>
+              <DetailValue>{managerName}</DetailValue>
+            </DetailRow>
+          ) : (
+            <DetailRow>
+              <DetailLabel><ShieldIcon /> Authority:</DetailLabel>
+              <DetailValue>
+                <ExecutiveStatus>
+                  {employee.tier === 1 ? 'Board Member' : 'Executive Leadership'}
+                </ExecutiveStatus>
+              </DetailValue>
+            </DetailRow>
+          )
         )}
       </EmployeeDetails>
     </StyledCardBody>

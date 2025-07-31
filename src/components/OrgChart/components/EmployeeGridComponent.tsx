@@ -10,7 +10,6 @@ interface EmployeeGridComponentProps {
   getRawEmployee: (employeeId: string) => RawEmployee | undefined
   getManagerName: (managerId: string) => string
   onCardClick: (employee: Employee) => void
-  onReportClick: (employee: Employee) => void
   selectedEmployeeId: string | null
   highlightedEmployeeId: string | null
   showingSubordinatesForId: string | null
@@ -25,7 +24,6 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   getRawEmployee,
   getManagerName,
   onCardClick,
-  onReportClick,
   selectedEmployeeId,
   highlightedEmployeeId,
   showingSubordinatesForId,
@@ -70,7 +68,6 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
             rawEmployee={getRawEmployee(employee.id)}
             managerName={employee.parentId ? getManagerName(employee.parentId) : undefined}
             onCardClick={onCardClick}
-            onReportClick={onReportClick}
             isSelected={selectedEmployeeId === employee.id}
             isHighlighted={highlightedEmployeeId === employee.id || isSubordinate}
             isDimmed={isDimmedByFilters || isDimmedBySubordinateView}
