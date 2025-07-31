@@ -42,7 +42,7 @@ export const breakpoints = {
 }
 
 // 🎨 CSS-in-JS helpers using our design system
-export const styled = {
+export const getStyledHelpers = () => ({
   // Common CSS patterns
   flexCenter: {
     display: 'flex',
@@ -105,4 +105,7 @@ export const styled = {
     xl: design.typography.fontXL,
     '2xl': design.typography.font2XL
   }
-}
+})
+
+// Export the styled helpers
+export const styled = getStyledHelpers()
