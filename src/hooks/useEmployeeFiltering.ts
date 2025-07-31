@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react'
 import { Employee, getHierarchyLabel } from '../types'
 import { RawEmployee } from '../services/dataLoader'
 
+export type SortOption = 'date' | 'name'
+
 export interface UseEmployeeFilteringReturn {
   searchQuery: string
   setSearchQuery: (query: string) => void
@@ -9,6 +11,8 @@ export interface UseEmployeeFilteringReturn {
   setDesignationFilter: (filter: string) => void
   tierFilter: number | ''
   setTierFilter: (filter: number | '') => void
+  sortBy: SortOption
+  setSortBy: (sort: SortOption) => void
   filteredEmployees: Employee[]
   designations: string[]
   tiers: Array<{ tier: number; label: string; count: number }>
@@ -25,6 +29,7 @@ export const useEmployeeFiltering = (
   const [searchQuery, setSearchQuery] = useState('')
   const [designationFilter, setDesignationFilter] = useState('')
   const [tierFilter, setTierFilter] = useState<number | ''>('')
+  const [sortBy, setSortBy] = useState<SortOption>('date')
 
   // Get unique designations for filter
   const designations = useMemo(() => {
@@ -50,7 +55,7 @@ export const useEmployeeFiltering = (
     return unique
   }, [employees])
 
-  // Filter employees based on search, designation, and tier
+  // Filter and sort employees based on search, designation, tier, and sort option
   const filteredEmployees = useMemo(() => {
     let filtered = employees
 
@@ -80,13 +85,45 @@ export const useEmployeeFiltering = (
       })
     }
 
+    // Apply sorting
+    filtered = [...filtered].sort((a, b) => {
+      if (sortBy === 'name') {
+        return a.name.localeCompare(b.name)
+      } else {
+        // Sort by joining date (newest first, null values at top)
+        const rawA = rawEmployees.find(raw => raw.employee_id === a.id)
+        const rawB = rawEmployees.find(raw => raw.employee_id === b.id)
+        
+        const dateStringA = rawA?.date_of_joining
+        const dateStringB = rawB?.date_of_joining
+        
+        // Handle null/undefined dates - put them at the top for admin attention
+        if (!dateStringA && !dateStringB) return 0
+        if (!dateStringA) return -1  // A goes first (top)
+        if (!dateStringB) return 1   // B goes first (top)
+        
+        // Parse dates properly
+        const dateA = new Date(dateStringA)
+        const dateB = new Date(dateStringB)
+        
+        // Handle invalid dates
+        if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0
+        if (isNaN(dateA.getTime())) return -1  // Invalid A goes to top
+        if (isNaN(dateB.getTime())) return 1   // Invalid B goes to top
+        
+        // Sort valid dates newest first (reverse chronological)
+        return dateB.getTime() - dateA.getTime()
+      }
+    })
+
     return filtered
-  }, [employees, rawEmployees, searchQuery, designationFilter, tierFilter])
+  }, [employees, rawEmployees, searchQuery, designationFilter, tierFilter, sortBy])
 
   const resetFilters = () => {
     setSearchQuery('')
     setDesignationFilter('')
     setTierFilter('')
+    setSortBy('date')
   }
 
   return {
@@ -96,6 +133,8 @@ export const useEmployeeFiltering = (
     setDesignationFilter,
     tierFilter,
     setTierFilter,
+    sortBy,
+    setSortBy,
     filteredEmployees,
     designations,
     tiers,

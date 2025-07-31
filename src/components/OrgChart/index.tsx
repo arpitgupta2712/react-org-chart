@@ -28,6 +28,8 @@ const OrgChart: React.FC = () => {
     setDesignationFilter,
     tierFilter,
     setTierFilter,
+    sortBy,
+    setSortBy,
     filteredEmployees,
     designations,
     tiers,
@@ -89,6 +91,8 @@ const OrgChart: React.FC = () => {
         onDesignationFilterChange={setDesignationFilter}
         tierFilter={tierFilter}
         onTierFilterChange={setTierFilter}
+        sortBy={sortBy}
+        onSortChange={setSortBy}
         designations={designations}
         tiers={tiers}
         employeeCounts={employeeCounts}

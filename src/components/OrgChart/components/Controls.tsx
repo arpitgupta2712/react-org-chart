@@ -15,7 +15,8 @@ import {
   ShieldIcon, 
   SettingsIcon, 
   ResetIcon,
-  BuildingIcon
+  BuildingIcon,
+  SortIcon
 } from '../../icons'
 
 interface ControlsProps {
@@ -25,6 +26,8 @@ interface ControlsProps {
   onDesignationFilterChange: (value: string) => void
   tierFilter: number | ''
   onTierFilterChange: (value: number | '') => void
+  sortBy: 'date' | 'name'
+  onSortChange: (sort: 'date' | 'name') => void
   designations: string[]
   tiers: Array<{ tier: number; label: string; count: number }>
   employeeCounts: Record<string, number>
@@ -38,6 +41,8 @@ export const Controls: React.FC<ControlsProps> = ({
   onDesignationFilterChange,
   tierFilter,
   onTierFilterChange,
+  sortBy,
+  onSortChange,
   designations,
   tiers,
   employeeCounts,
@@ -56,12 +61,22 @@ export const Controls: React.FC<ControlsProps> = ({
     <StyledControls isExpanded={isExpanded}>
       {/* Simple Header Bar */}
       <ControlsHeader>
-        <ToggleButton 
-          onClick={() => setIsExpanded(!isExpanded)}
-          isExpanded={isExpanded}
-        >
-          <SettingsIcon /> {isExpanded ? 'Hide Filters' : 'Show Filters'}
-        </ToggleButton>
+        <ControlGroup>
+          <ToggleButton 
+            onClick={() => setIsExpanded(!isExpanded)}
+            isExpanded={isExpanded}
+          >
+            <SettingsIcon /> {isExpanded ? 'Hide Filters' : 'Show Filters'}
+          </ToggleButton>
+          
+          <ToggleButton
+            onClick={() => onSortChange(sortBy === 'date' ? 'name' : 'date')}
+            isExpanded={false}
+            title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
+          >
+            <SortIcon /> {sortBy === 'date' ? 'By Date' : 'By Name'}
+          </ToggleButton>
+        </ControlGroup>
         
         {activeFilters.length > 0 && (
           <ResetButton onClick={onReset} title="Reset All Filters">
