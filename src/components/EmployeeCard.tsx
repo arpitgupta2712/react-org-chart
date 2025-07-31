@@ -45,10 +45,16 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   } = config
 
   const hasReports = employee.children.length > 0
+  const [isFlipped, setIsFlipped] = useState(false)
 
   // Use the dynamic hierarchy label function from types
   const getTierName = (tier: number): string => {
     return getHierarchyLabel(tier)
+  }
+
+  const handleFlipCard = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent triggering the main card click
+    setIsFlipped(!isFlipped)
   }
 
   const formatPhone = () => {
@@ -92,78 +98,104 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       data-tier={employee.tier}
       onClick={handleCardClick}
     >
-      {/* Card Header */}
-      <CardHeader>
-        <EmployeeName>{employee.name}</EmployeeName>
-        <EmployeeId>
-          {rawEmployee?.company_id || employee.id}
-        </EmployeeId>
-      </CardHeader>
+      <FlipContainer isFlipped={isFlipped}>
+        {/* FRONT OF CARD */}
+        <CardFront>
+          {/* Card Header */}
+          <CardHeader>
+            <EmployeeName>{employee.name}</EmployeeName>
+            <EmployeeId>
+              {rawEmployee?.company_id || employee.id}
+            </EmployeeId>
+          </CardHeader>
 
-      {/* Card Body */}
-      <CardBody>
-        <EmployeeTitle>{employee.position}</EmployeeTitle>
-        
-        {/* Employee Details */}
-        <EmployeeDetails>
-          {showPhone && (
-            <DetailRow>
-              <DetailLabel>Phone:</DetailLabel>
-              <DetailValue>{formatPhone()}</DetailValue>
-            </DetailRow>
-          )}
-          
-          {showSalary && rawEmployee?.salary_package && (
-            <DetailRow>
-              <DetailLabel>Salary:</DetailLabel>
-              <DetailValue>
-                ₹{rawEmployee.salary_package.toLocaleString()}
-              </DetailValue>
-            </DetailRow>
-          )}
-          
-          {showTier && (
-            <DetailRow>
-              <DetailLabel>Tier:</DetailLabel>
-              <DetailValue>{getTierName(employee.tier)}</DetailValue>
-            </DetailRow>
-          )}
-          
-          {showManager && employee.parentId && managerName && (
-            <DetailRow>
-              <DetailLabel>Reports to:</DetailLabel>
-              <DetailValue>{managerName}</DetailValue>
-            </DetailRow>
-          )}
-        </EmployeeDetails>
-      </CardBody>
+          {/* Card Body */}
+          <CardBody>
+            <EmployeeTitle>{employee.position}</EmployeeTitle>
+            
+            {/* Employee Details */}
+            <EmployeeDetails>
+              {showPhone && (
+                <DetailRow>
+                  <DetailLabel>Phone:</DetailLabel>
+                  <DetailValue>{formatPhone()}</DetailValue>
+                </DetailRow>
+              )}
+              
+              {showSalary && rawEmployee?.salary_package && (
+                <DetailRow>
+                  <DetailLabel>Salary:</DetailLabel>
+                  <DetailValue>
+                    ₹{rawEmployee.salary_package.toLocaleString()}
+                  </DetailValue>
+                </DetailRow>
+              )}
+              
+              {showTier && (
+                <DetailRow>
+                  <DetailLabel>Tier:</DetailLabel>
+                  <DetailValue>{getTierName(employee.tier)}</DetailValue>
+                </DetailRow>
+              )}
+              
+              {showManager && employee.parentId && managerName && (
+                <DetailRow>
+                  <DetailLabel>Reports to:</DetailLabel>
+                  <DetailValue>{managerName}</DetailValue>
+                </DetailRow>
+              )}
+            </EmployeeDetails>
+          </CardBody>
 
-      {/* Reports Section */}
-      {showReports && hasReports && (
-        <ReportsSection>
-          <ReportsInfo>
-            <ReportsCount>{employee.children.length}</ReportsCount>
-            <ReportsLabel>direct reports</ReportsLabel>
-          </ReportsInfo>
-          <ReportsHint>Click card to highlight team</ReportsHint>
-          
-          <TeamPreview>
-            {employee.children.slice(0, 3).map((child, index) => (
-              <TeamMemberName 
-                key={child.id}
-                onClick={(e) => handleTeamMemberClick(child, e)}
-                title={`Navigate to ${child.name}`}
-              >
-                {child.name}
-                {index < Math.min(employee.children.length - 1, 2) && ', '}
-              </TeamMemberName>
-            ))}
-            {employee.children.length > 3 && (
-              <MoreMembers>... +{employee.children.length - 3} more</MoreMembers>
-            )}
-          </TeamPreview>
-        </ReportsSection>
-      )}
+          {/* Team Summary - Just count and flip button */}
+          {showReports && hasReports && (
+            <TeamSummary>
+              <TeamCount>
+                👥 {employee.children.length} direct report{employee.children.length !== 1 ? 's' : ''}
+              </TeamCount>
+              <FlipButton onClick={handleFlipCard}>
+                View Team →
+              </FlipButton>
+            </TeamSummary>
+          )}
+        </CardFront>
+
+        {/* BACK OF CARD - Team Details */}
+        <CardBack>
+          <BackHeader>
+            <BackTitle>
+              {employee.name}'s Team
+            </BackTitle>
+            <FlipButton onClick={handleFlipCard}>
+              ← Back
+            </FlipButton>
+          </BackHeader>
+
+          <TeamDetails>
+            <TeamStats>
+              <strong>{employee.children.length}</strong> Direct Reports
+            </TeamStats>
+            
+            <TeamList>
+              {employee.children.map((child, index) => (
+                <TeamMember 
+                  key={child.id}
+                  onClick={(e) => handleTeamMemberClick(child, e)}
+                  title={`Navigate to ${child.name}`}
+                >
+                  <MemberInfo>
+                    <MemberName>{child.name}</MemberName>
+                    <MemberRole>{child.position}</MemberRole>
+                  </MemberInfo>
+                  <NavigateIcon>→</NavigateIcon>
+                </TeamMember>
+              ))}
+            </TeamList>
+            
+            <TeamHint>Click any team member to navigate to their card</TeamHint>
+          </TeamDetails>
+        </CardBack>
+      </FlipContainer>
     </StyledEmployeeCard>
   )
 }
@@ -307,63 +339,161 @@ const DetailValue = styled.span`
   }
 `
 
-const ReportsSection = styled.div`
-  margin-top: ${sizes.spaceLG};
+// 🔄 FLIP CARD COMPONENTS
+const FlipContainer = styled.div<{ isFlipped: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+  transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
+`
+
+const CardFront = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+`
+
+const CardBack = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  padding: ${sizes.spaceLG};
+`
+
+// 👥 TEAM SUMMARY (Front of card)
+const TeamSummary = styled.div`
+  margin-top: auto;
   padding-top: ${sizes.spaceMD};
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-`
-
-const ReportsInfo = styled.div`
   display: flex;
-  align-items: baseline;
-  gap: ${sizes.spaceXS};
-  margin-bottom: ${sizes.spaceXS};
-`
-
-const ReportsCount = styled.span`
-  font-size: ${sizes.fontLG};
-  font-weight: 700;
-  color: ${colors.textWhite};
-`
-
-const ReportsLabel = styled.span`
-  font-size: ${sizes.fontXS};
-  font-weight: 500;
-  opacity: 0.8;
-`
-
-const ReportsHint = styled.div`
-  font-size: ${sizes.fontXS};
-  opacity: 0.7;
-  font-style: italic;
-  margin-bottom: ${sizes.spaceSM};
-`
-
-const TeamPreview = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: ${sizes.spaceXS};
+  justify-content: space-between;
   align-items: center;
 `
 
-const TeamMemberName = styled.span`
+const TeamCount = styled.div`
+  font-size: ${sizes.fontSM};
+  font-weight: 600;
+  opacity: 0.9;
+`
+
+const FlipButton = styled.button`
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: inherit;
+  padding: ${sizes.spaceXS} ${sizes.spaceSM};
+  border-radius: ${sizes.spaceSM};
   font-size: ${sizes.fontXS};
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   
   &:hover {
-    text-decoration-color: currentColor;
+    background: rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
   }
 `
 
-const MoreMembers = styled.span`
+// 📋 BACK OF CARD (Team details)
+const BackHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${sizes.spaceLG};
+  padding-bottom: ${sizes.spaceMD};
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+`
+
+const BackTitle = styled.h3`
+  font-size: ${sizes.fontLG};
+  font-weight: 700;
+  margin: 0;
+`
+
+const TeamDetails = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`
+
+const TeamStats = styled.div`
+  text-align: center;
+  margin-bottom: ${sizes.spaceLG};
+  font-size: ${sizes.fontBase};
+  
+  strong {
+    font-size: ${sizes.fontXL};
+    display: block;
+    margin-bottom: ${sizes.spaceXS};
+  }
+`
+
+const TeamList = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${sizes.spaceSM};
+  margin-bottom: ${sizes.spaceMD};
+  max-height: 200px;
+  overflow-y: auto;
+`
+
+const TeamMember = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${sizes.spaceSM};
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: ${sizes.spaceSM};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+  }
+`
+
+const MemberInfo = styled.div`
+  flex: 1;
+`
+
+const MemberName = styled.div`
+  font-weight: 600;
+  font-size: ${sizes.fontSM};
+  margin-bottom: ${sizes.spaceXS};
+`
+
+const MemberRole = styled.div`
   font-size: ${sizes.fontXS};
-  font-weight: 500;
+  opacity: 0.8;
+`
+
+const NavigateIcon = styled.div`
+  font-weight: 700;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  
+  ${TeamMember}:hover & {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+`
+
+const TeamHint = styled.div`
+  font-size: ${sizes.fontXS};
   opacity: 0.7;
+  text-align: center;
+  font-style: italic;
+  margin-top: auto;
 `
 
 export default EmployeeCard
