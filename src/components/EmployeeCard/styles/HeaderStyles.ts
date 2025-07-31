@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { sizes } from '../../../constants/colors'
+import { sizes, design } from '../../../constants/colors'
 
 export const CardHeader = styled.div`
   display: flex;
@@ -43,6 +43,7 @@ export const TierBadge = styled.div<{ tier: number }>`
 `
 
 export const EmployeeName = styled.div`
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.employeeName};
   font-weight: 800;
   line-height: 1.2;
@@ -56,6 +57,7 @@ export const EmployeeName = styled.div`
 `
 
 export const EmployeeSubtitle = styled.div`
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   font-weight: 600;
   opacity: 0.9;
@@ -80,6 +82,7 @@ export const EmployeeSubtitle = styled.div`
 `
 
 export const EmployeeId = styled.div`
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.employeeId};
   font-weight: 700;
   background: rgba(255, 255, 255, 0.25);

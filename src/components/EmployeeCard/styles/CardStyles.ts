@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { getTierColors } from '../../../constants/colors'
-import { colors, sizes } from '../../../constants/colors'
+import { colors, sizes, design } from '../../../constants/colors'
 
 export const StyledEmployeeCard = styled.div<{
   tier: number
@@ -10,7 +10,7 @@ export const StyledEmployeeCard = styled.div<{
   isHighlighted: boolean
   isDimmed: boolean
 }>`
-  font-family: 'PT Sans', sans-serif;
+  font-family: ${design.typography.fontFamily};
   background: ${props => {
     const tierColors = getTierColors(props.tier);
     return tierColors.background;

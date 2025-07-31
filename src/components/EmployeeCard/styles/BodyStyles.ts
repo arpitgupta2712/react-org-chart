@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { sizes } from '../../../constants/colors'
+import { sizes, design } from '../../../constants/colors'
 
 export const CardBody = styled.div`
   flex-grow: 1; /* Allow body to take up remaining space */
@@ -8,6 +8,7 @@ export const CardBody = styled.div`
 `
 
 export const EmployeeTitle = styled.div`
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.employeeTitle};
   font-weight: 700;
   margin-bottom: ${sizes.spaceLG};
@@ -50,6 +51,7 @@ export const DetailRow = styled.div`
 `
 
 export const DetailLabel = styled.span`
+  font-family: ${design.typography.fontFamily};
   font-weight: 600;
   opacity: 0.85;
   display: flex;
@@ -57,12 +59,16 @@ export const DetailLabel = styled.span`
   gap: ${sizes.spaceXS};
   
   svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
     opacity: 0.7;
     flex-shrink: 0;
   }
 `
 
 export const DetailValue = styled.span`
+  font-family: ${design.typography.fontFamily};
   font-weight: 700;
   text-align: right;
   flex-shrink: 0;

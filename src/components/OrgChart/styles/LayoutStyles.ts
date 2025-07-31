@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { colors, sizes } from '../../../constants/colors'
+import { colors, sizes, design } from '../../../constants/colors'
 
 export const Container = styled.div`
-  font-family: 'PT Sans', sans-serif;
+  font-family: ${design.typography.fontFamily};
   background: ${colors.cardBackground};
   min-height: 100vh;
   padding: ${sizes.space2XL};

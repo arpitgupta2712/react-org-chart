@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, sizes } from '../../constants/colors'
+import { colors, sizes, design } from '../../constants/colors'
 
 export const HeaderTextContent = styled.div`
   flex: 1;
@@ -96,6 +96,7 @@ export const HeaderIcon = styled.div`
 `
 
 export const CompanyTitle = styled.h1`
+  font-family: ${design.typography.fontFamily};
   font-size: 2.5rem;
   font-weight: 800;
   color: ${colors.textPrimary};
@@ -120,6 +121,7 @@ export const CompanyTitle = styled.h1`
 `
 
 export const CompanySubtitle = styled.p`
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontLG};
   color: ${colors.textSecondary};
   margin: 0;
@@ -150,6 +152,7 @@ export const TechStack = styled.span`
   color: white;
   padding: ${sizes.spaceXS} ${sizes.spaceSM};
   border-radius: ${sizes.spaceXS};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   font-weight: 700;
   letter-spacing: 0.5px;

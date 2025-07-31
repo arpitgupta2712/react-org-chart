@@ -15,7 +15,8 @@ import {
   ShieldIcon, 
   SettingsIcon, 
   ResetIcon,
-  BuildingIcon
+  BuildingIcon,
+  SortIcon
 } from '../../icons'
 
 interface ControlsProps {

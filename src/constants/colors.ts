@@ -114,6 +114,9 @@ export const design = {
 
   // 📱 Typography Scale
   typography: {
+    // Font Family - PT Sans everywhere!
+    fontFamily: "'PT Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    
     // Base sizes
     fontXS: '0.875rem',   // 14px
     fontSM: '1rem',       // 16px

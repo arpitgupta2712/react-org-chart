@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, sizes } from '../../../constants/colors'
+import { colors, sizes, design } from '../../../constants/colors'
 
 export const Controls = styled.div<{ isExpanded: boolean }>`
   background: transparent;
@@ -41,6 +41,7 @@ export const ToggleButton = styled.button<{ isExpanded: boolean }>`
     : '2px solid transparent'
   };
   border-radius: ${sizes.spaceMD};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   font-weight: 700;
   cursor: pointer;
@@ -81,10 +82,11 @@ export const ToggleButton = styled.button<{ isExpanded: boolean }>`
     transform: translateY(0);
   }
   
-  /* Icon sizing */
+  /* Icon sizing for Lucide icons */
   svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
     
     /* Add margin only when there's text after the icon */
     &:not(:only-child) {
@@ -112,6 +114,7 @@ export const FilterLabel = styled.label`
   align-items: center;
   justify-content: center;
   gap: ${sizes.spaceSM};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontLG};
   font-weight: 700;
   color: ${colors.textPrimary};
@@ -120,8 +123,9 @@ export const FilterLabel = styled.label`
   text-align: center;
   
   svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+    stroke-width: 2;
     color: ${colors.textSecondary};
   }
 `
@@ -143,6 +147,7 @@ export const FilterSelect = styled.select`
   padding: ${sizes.spaceMD} ${sizes.spaceLG};
   border: 2px solid ${colors.borderDefault};
   border-radius: ${sizes.spaceMD};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   background: white;
   cursor: pointer;
@@ -188,6 +193,7 @@ export const SearchInput = styled.input`
   padding: ${sizes.spaceMD} ${sizes.spaceLG};
   border: 2px solid ${colors.borderDefault};
   border-radius: ${sizes.spaceMD};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   min-width: 250px;
   flex: 1;
@@ -236,6 +242,7 @@ export const ResetButton = styled.button<{ disabled?: boolean }>`
   color: ${props => props.disabled ? colors.textLight : 'white'};
   border: ${props => props.disabled ? `2px solid transparent` : `2px solid transparent`};
   border-radius: ${sizes.spaceMD};
+  font-family: ${design.typography.fontFamily};
   font-size: ${sizes.fontSM};
   font-weight: 700;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
@@ -267,9 +274,10 @@ export const ResetButton = styled.button<{ disabled?: boolean }>`
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   
-  /* Icon sizing */
+  /* Icon sizing for Lucide icons */
   svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
   }
 `
