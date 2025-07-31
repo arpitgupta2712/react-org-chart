@@ -123,7 +123,7 @@ export const TierHeader = styled.div<{ tier: number }>`
   padding: 0.75rem 1.5rem;
   margin: -2rem -2rem 1.5rem -2rem; /* Negative margins to extend to card edges */
   border-radius: ${sizes.cardBorderRadius} ${sizes.cardBorderRadius} 0 0;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;

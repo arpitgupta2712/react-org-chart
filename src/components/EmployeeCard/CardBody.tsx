@@ -2,25 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Employee } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
 import { 
-  EmailIcon, 
-  CalendarIcon, 
-  UserIcon, 
-  ShieldIcon,
-  PersonIcon,
-  FamilyIcon,
-  HomeIcon,
-  CityIcon,
-  MoneyIcon,
-  BankIcon,
-  CodeIcon,
-  IdIcon,
-  DocumentIcon,
-  VerifiedIcon
-} from '../icons'
+  createEmployeeDataSets,
+  DataSet,
+  formatCurrency,
+  formatAccountNumber,
+  formatDate
+} from './dataSets'
 import { RelativeTime } from '../common/RelativeTime'
 import {
   CardBody as StyledCardBody,
   EmployeeTitle,
+  DataSetTitle,
   EmployeeDetails,
   DetailRow,
   DetailLabel,
@@ -40,38 +32,7 @@ interface CardBodyProps {
   showManager?: boolean
 }
 
-// Data set definitions for rotating employee details
-interface DataSet {
-  id: string
-  name: string
-  fields: Array<{
-    icon: React.ComponentType
-    label: string
-    value: (employee: Employee, rawEmployee?: RawEmployee, managerName?: string) => React.ReactNode
-  }>
-}
 
-// Utility functions for formatting
-const formatCurrency = (amount: number | string | null | undefined): string => {
-  if (!amount) return 'Not provided'
-  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0
-  }).format(numAmount)
-}
-
-const formatAccountNumber = (account: string | null | undefined): string => {
-  if (!account) return 'Not provided'
-  // Show only last 4 digits for security
-  return account.length > 4 ? `****${account.slice(-4)}` : account
-}
-
-const formatDate = (dateString: string | null | undefined): React.ReactNode => {
-  if (!dateString) return <MissingData>Not provided</MissingData>
-  return <RelativeTime dateString={dateString} />
-}
 
 // Component for truncated address with tooltip
 const TruncatedAddress: React.FC<{ address: string }> = ({ address }) => {
@@ -122,122 +83,8 @@ export const CardBody: React.FC<CardBodyProps> = ({
 }) => {
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0)
 
-  // Define all data sets
-  const dataSets: DataSet[] = [
-    {
-      id: 'basic',
-      name: 'Basic Info',
-      fields: [
-        {
-          icon: EmailIcon,
-          label: 'Email:',
-          value: (emp, raw) => raw?.company_email_id ? (
-            <a href={`mailto:${raw.company_email_id}`}>{raw.company_email_id}</a>
-          ) : <MissingData>No email provided</MissingData>
-        },
-        {
-          icon: CalendarIcon,
-          label: 'Joined:',
-          value: (emp, raw) => formatDate(raw?.date_of_joining)
-        },
-        {
-          icon: showManager && employee.parentId && managerName ? UserIcon : ShieldIcon,
-          label: showManager && employee.parentId && managerName ? 'Reports to:' : 'Authority:',
-          value: (emp, raw, mgr) => showManager && emp.parentId && mgr ? mgr : (
-            <ExecutiveStatus>
-              {emp.tier === 1 ? 'Board Member' : 'Executive Leadership'}
-            </ExecutiveStatus>
-          )
-        }
-      ]
-    },
-    {
-      id: 'personal',
-      name: 'Personal Details',
-      fields: [
-        {
-          icon: PersonIcon,
-          label: 'Nickname:',
-          value: (emp, raw) => raw?.nickname || <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: EmailIcon,
-          label: 'Personal Email:',
-          value: (emp, raw) => raw?.personal_email_id ? (
-            <a href={`mailto:${raw.personal_email_id}`}>{raw.personal_email_id}</a>
-          ) : <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: CalendarIcon,
-          label: 'Date of Birth:',
-          value: (emp, raw) => formatDate(raw?.date_of_birth)
-        }
-      ]
-    },
-    {
-      id: 'emergency',
-      name: 'Emergency Details',
-      fields: [
-        {
-          icon: FamilyIcon,
-          label: "Father's Name:",
-          value: (emp, raw) => raw?.fathers_name || <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: HomeIcon,
-          label: 'Address:',
-          value: (emp, raw) => raw?.address ? <TruncatedAddress address={raw.address} /> : <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: CityIcon,
-          label: 'City:',
-          value: (emp, raw) => raw?.city ? `${raw.city}, ${raw.state || ''}`.trim().replace(/,$/, '') : <MissingData>Not provided</MissingData>
-        }
-      ]
-    },
-    {
-      id: 'salary',
-      name: 'Salary Details',
-      fields: [
-        {
-          icon: MoneyIcon,
-          label: 'Package:',
-          value: (emp, raw) => raw?.salary_package ? formatCurrency(raw.salary_package) : <MissingData>Not disclosed</MissingData>
-        },
-        {
-          icon: BankIcon,
-          label: 'Bank Account:',
-          value: (emp, raw) => raw?.salary_bank_account ? formatAccountNumber(raw.salary_bank_account) : <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: CodeIcon,
-          label: 'IFSC Code:',
-          value: (emp, raw) => raw?.IFSC_code || <MissingData>Not provided</MissingData>
-        }
-      ]
-    },
-    {
-      id: 'government',
-      name: 'Government IDs',
-      fields: [
-        {
-          icon: IdIcon,
-          label: 'Aadhaar:',
-          value: (emp, raw) => raw?.aadhaar_number ? `****${raw.aadhaar_number.slice(-4)}` : <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: DocumentIcon,
-          label: 'PAN Number:',
-          value: (emp, raw) => raw?.pan_number || <MissingData>Not provided</MissingData>
-        },
-        {
-          icon: VerifiedIcon,
-          label: 'PF Registered:',
-          value: (emp, raw) => raw?.pf_registered === 'Yes' ? 'Yes' : raw?.pf_registered === 'No' ? 'No' : <MissingData>Not specified</MissingData>
-        }
-      ]
-    }
-  ]
+  // Get data sets from dedicated file
+  const dataSets = createEmployeeDataSets(showManager)
 
   // Auto-rotation effect
   useEffect(() => {
@@ -253,17 +100,25 @@ export const CardBody: React.FC<CardBodyProps> = ({
   return (
     <StyledCardBody>
       <EmployeeTitle>{employee.position}</EmployeeTitle>
+      <DataSetTitle>{currentDataSet.name}</DataSetTitle>
       
       <EmployeeDetails>
         {currentDataSet.fields.map((field, index) => {
           const IconComponent = field.icon
+          const value = field.value(employee, rawEmployee, managerName)
+          
+          // Handle special case for truncated address
+          const displayValue: React.ReactNode = value && typeof value === 'object' && 'type' in value && value.type === 'truncated-address' 
+            ? <TruncatedAddress address={(value as any).address} />
+            : value as React.ReactNode
+          
           return (
             <DetailRow key={`${currentDataSet.id}-${index}`}>
               <DetailLabel>
                 <IconComponent /> {field.label}
               </DetailLabel>
               <DetailValue>
-                {field.value(employee, rawEmployee, managerName)}
+                {displayValue}
               </DetailValue>
             </DetailRow>
           )

@@ -58,14 +58,14 @@ export const HeaderContent = styled.div`
   justify-content: space-between;
   
   @media (max-width: 768px) {
-    padding: ${sizes.spaceMD};
+    padding: ${sizes.spaceLG} ${sizes.spaceMD};
     flex-direction: row;
     align-items: center;
     gap: ${sizes.spaceSM};
   }
   
   @media (max-width: 480px) {
-    padding: ${sizes.spaceSM};
+    padding: ${sizes.spaceLG} ${sizes.spaceSM};
     gap: ${sizes.spaceXS};
   }
 `
@@ -74,23 +74,23 @@ export const HeaderIcon = styled.div`
   flex-shrink: 0;
   
   img {
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
     object-fit: contain;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
   }
   
   @media (max-width: 768px) {
     img {
-      width: 64px;
-      height: 64px;
+      width: 100px;
+      height: 100px;
     }
   }
   
   @media (max-width: 480px) {
     img {
-      width: 36px;
-      height: 36px;
+      width: 60px;
+      height: 60px;
     }
   }
 `
@@ -109,13 +109,13 @@ export const CompanyTitle = styled.h1`
   letter-spacing: -0.02em;
   
   @media (max-width: 768px) {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     margin: 0 0 ${sizes.spaceXS} 0;
     line-height: 1.2;
   }
   
   @media (max-width: 480px) {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     margin: 0;
   }
 `
@@ -131,13 +131,13 @@ export const CompanySubtitle = styled.p`
   gap: ${sizes.spaceSM};
   
   @media (max-width: 768px) {
-    font-size: ${sizes.fontSM};
+    font-size: ${sizes.fontBase};
     gap: ${sizes.spaceXS};
     flex-wrap: wrap;
   }
   
   @media (max-width: 480px) {
-    font-size: ${sizes.fontXS};
+    font-size: ${sizes.fontSM};
     gap: 2px;
     
     /* Stack vertically on very narrow screens */
@@ -148,7 +148,7 @@ export const CompanySubtitle = styled.p`
 `
 
 export const TechStack = styled.span`
-  background: linear-gradient(135deg, ${colors.selectedBorder} 0%, ${colors.highlightBorder} 100%);
+  background: ${colors.highlightBorder};
   color: white;
   padding: ${sizes.spaceXS} ${sizes.spaceSM};
   border-radius: ${sizes.spaceXS};
@@ -171,15 +171,15 @@ export const TechStack = styled.span`
   }
   
   @media (max-width: 768px) {
-    font-size: ${sizes.fontXS};
-    padding: 2px ${sizes.spaceXS};
+    font-size: ${sizes.fontSM};
+    padding: ${sizes.spaceXS} ${sizes.spaceSM};
     letter-spacing: 0.25px;
   }
   
   @media (max-width: 480px) {
-    font-size: 0.75rem;
-    padding: 1px 6px;
+    font-size: ${sizes.fontXS};
+    padding: ${sizes.spaceXS} ${sizes.spaceSM};
     letter-spacing: 0;
-    border-radius: 3px;
+    border-radius: ${sizes.spaceXS};
   }
 `

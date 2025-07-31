@@ -12,6 +12,7 @@ export const EmployeeTitle = styled.div`
   font-size: ${sizes.employeeTitle};
   font-weight: 700;
   margin-bottom: ${sizes.spaceLG};
+  margin-top: ${sizes.spaceMD};
   line-height: 1.3;
   opacity: 0.95;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -29,6 +30,24 @@ export const EmployeeTitle = styled.div`
     background: rgba(255, 255, 255, 0.3);
     border-radius: 1px;
   }
+`
+
+export const DataSetTitle = styled.div`
+  font-family: ${design.typography.fontFamily};
+  font-size: ${sizes.fontSM};
+  font-weight: 600;
+  margin-bottom: ${sizes.spaceMD};
+  padding: ${sizes.spaceXS} ${sizes.spaceSM};
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: ${sizes.spaceXS};
+  text-align: center;
+  opacity: 0.9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(3px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
 `
 
 export const EmployeeDetails = styled.div`
