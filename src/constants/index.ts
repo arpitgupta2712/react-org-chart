@@ -1,9 +1,12 @@
-// Export all theme constants for easy importing
+// 🎨 SIMPLIFIED EXPORTS - Single source of truth
 
-export { colors, cssColors } from './colors'
-export { typography, cssTypography } from './typography'
-export { spacing, cssSpacing } from './spacing'
-export { shadows, cssShadows } from './shadows'
+export { 
+  colors, 
+  design, 
+  sizes, 
+  getTierColors 
+} from './colors'
+
 export { 
   theme, 
   cssVariables, 
@@ -12,21 +15,21 @@ export {
   useTheme,
   type Theme,
   type ThemeColors,
-  type ThemeTypography,
-  type ThemeSpacing,
-  type ThemeShadows 
+  type ThemeDesign
 } from './theme'
 
 // Re-export default theme
 export { default } from './theme'
 
-// Import getThemeValue to use in utilities
-import { getThemeValue } from './theme'
+// Import theme and design tokens for utilities
+import { theme } from './theme'
+import { colors, design } from './colors'
 
-// Common theme utilities
-export const getColor = (path: string, fallback = '#000000') => getThemeValue(`colors.${path}`, fallback)
-export const getSpacing = (key: number | string) => getThemeValue(`spacing.scale.${key}`, '0rem')
-export const getShadow = (path: string, fallback = 'none') => getThemeValue(`shadows.${path}`, fallback)
+// 🎯 Easy access utilities
+export const getColor = (colorName: keyof typeof colors, fallback = '#000000') => colors[colorName] || fallback
+export const getSpacing = (spaceName: keyof typeof design.spacing) => design.spacing[spaceName]
+export const getShadow = (shadowName: keyof typeof design.shadows) => design.shadows[shadowName]
+export const getFont = (fontName: keyof typeof design.typography) => design.typography[fontName]
 
 // Breakpoint helpers
 export const breakpoints = {
@@ -38,7 +41,7 @@ export const breakpoints = {
   '2xl': '(max-width: 1536px)'
 }
 
-// CSS-in-JS helpers for styled components or inline styles
+// 🎨 CSS-in-JS helpers using our design system
 export const styled = {
   // Common CSS patterns
   flexCenter: {
@@ -58,44 +61,48 @@ export const styled = {
     flexDirection: 'column' as const
   },
   
-  // Quick shadow applications
+  // Quick shadow applications from our design system
   shadow: {
-    sm: 'var(--shadow-sm)',
-    md: 'var(--shadow-md)',
-    lg: 'var(--shadow-lg)',
-    xl: 'var(--shadow-xl)'
+    sm: design.shadows.sm,
+    md: design.shadows.md,
+    lg: design.shadows.lg,
+    xl: design.shadows.xl,
+    card: design.shadows.card,
+    cardHover: design.shadows.cardHover
   },
   
   // Quick color applications
   text: {
-    primary: 'var(--color-neutral-950)',
-    secondary: 'var(--color-neutral-700)',
-    muted: 'var(--color-neutral-600)',
-    accent: 'var(--color-primary-500)'
+    primary: colors.textPrimary,
+    secondary: colors.textSecondary,
+    light: colors.textLight,
+    white: colors.textWhite
   },
   
   // Quick background applications
   bg: {
-    primary: 'var(--bg-primary)',
-    secondary: 'var(--bg-secondary)',
-    tertiary: 'var(--bg-tertiary)'
+    page: colors.pageBackground,
+    card: colors.cardBackground,
+    app: colors.appBackground
   },
   
   // Quick spacing applications
   space: {
-    xs: 'var(--space-1)',
-    sm: 'var(--space-2)',
-    md: 'var(--space-4)',
-    lg: 'var(--space-6)',
-    xl: 'var(--space-8)'
+    xs: design.spacing.xs,
+    sm: design.spacing.sm,
+    md: design.spacing.md,
+    lg: design.spacing.lg,
+    xl: design.spacing.xl,
+    '2xl': design.spacing['2xl']
   },
   
-  // Quick border radius applications
-  radius: {
-    sm: 'var(--radius-sm)',
-    md: 'var(--radius-md)',
-    lg: 'var(--radius-lg)',
-    xl: 'var(--radius-xl)',
-    full: 'var(--radius-full)'
+  // Quick typography applications
+  font: {
+    xs: design.typography.fontXS,
+    sm: design.typography.fontSM,
+    base: design.typography.fontBase,
+    lg: design.typography.fontLG,
+    xl: design.typography.fontXL,
+    '2xl': design.typography.font2XL
   }
 }

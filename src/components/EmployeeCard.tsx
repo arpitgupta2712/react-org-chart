@@ -218,39 +218,65 @@ const StyledEmployeeCard = styled.div<{
     const tierColors = getTierColors(props.tier);
     return tierColors.text;
   }};
-  border: 2px solid ${props => {
+  border: 3px solid ${props => {
     const tierColors = getTierColors(props.tier);
     return tierColors.border;
   }};
   border-radius: ${sizes.cardBorderRadius};
-  padding: ${props => props.compact ? '1.25rem' : sizes.cardPadding};
-  min-height: ${props => props.compact ? '9rem' : sizes.cardMinHeight};
+  padding: ${props => props.compact ? '2rem' : sizes.cardPadding};
+  min-height: ${props => props.compact ? '18rem' : sizes.cardMinHeight};
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  box-shadow: ${props => {
-    const tierColors = getTierColors(props.tier);
-    return tierColors.shadow;
-  }};
+  overflow: hidden;
+  
+  /* Enhanced shadows with multiple layers */
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Subtle pattern overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    transform: translateY(-6px);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      0 8px 16px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
   }
 
   // Selected state - blue border with glow
   ${props => props.isSelected && `
-    border: 3px solid ${colors.selectedBorder} !important;
-    box-shadow: 0 0 0 4px rgba(127, 163, 184, 0.4), ${getTierColors(props.tier).shadow} !important;
-    transform: translateY(-3px);
+    border: 4px solid ${colors.selectedBorder} !important;
+    box-shadow: 
+      0 0 0 4px rgba(127, 163, 184, 0.4),
+      0 20px 40px rgba(127, 163, 184, 0.3),
+      0 8px 16px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-8px);
     z-index: 2;
   `}
 
   // Highlighted state (subordinates) - green border  
   ${props => props.isHighlighted && `
-    border: 2px solid ${colors.highlightBorder} !important;
-    box-shadow: 0 0 0 3px ${colors.focusRing}, ${getTierColors(props.tier).shadow} !important;
-    transform: translateY(-1px);
+    border: 3px solid ${colors.highlightBorder} !important;
+    box-shadow: 
+      0 0 0 3px ${colors.focusRing},
+      0 15px 30px rgba(143, 166, 142, 0.25),
+      0 6px 12px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-4px);
     z-index: 1;
   `}
 
@@ -258,12 +284,12 @@ const StyledEmployeeCard = styled.div<{
   ${props => props.isDimmed && `
     opacity: ${colors.dimmedOpacity};
     filter: grayscale(50%) brightness(0.8);
-    transform: scale(0.98);
+    transform: scale(0.96);
     
     &:hover {
       opacity: 0.6;
       filter: grayscale(30%) brightness(0.9);
-      transform: scale(0.99);
+      transform: scale(0.98);
     }
   `}
 `
@@ -272,40 +298,77 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: ${sizes.spaceMD};
+  margin-bottom: ${sizes.spaceLG};
+  position: relative;
+  z-index: 1;
 `
 
 const EmployeeName = styled.div`
   font-size: ${sizes.employeeName};
-  font-weight: 700;
-  line-height: 1.25;
+  font-weight: 800;
+  line-height: 1.2;
   flex: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-right: ${sizes.spaceMD};
+  
+  /* Add a subtle highlight */
+  background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
 `
 
 const EmployeeId = styled.div`
   font-size: ${sizes.employeeId};
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.2);
-  padding: ${sizes.spaceXS} ${sizes.spaceSM};
-  border-radius: 0.75rem;
-  margin-left: ${sizes.spaceSM};
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: ${sizes.spaceSM} ${sizes.spaceMD};
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 4rem;
+  
+  &::before {
+    content: '#';
+    opacity: 0.7;
+    font-weight: 500;
+  }
 `
 
 const CardBody = styled.div`
   flex: 1;
+  position: relative;
+  z-index: 1;
 `
 
 const EmployeeTitle = styled.div`
   font-size: ${sizes.employeeTitle};
-  font-weight: 600;
-  margin-bottom: ${sizes.spaceMD};
+  font-weight: 700;
+  margin-bottom: ${sizes.spaceXL};
   line-height: 1.3;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+  /* Add subtle underline */
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -${sizes.spaceSM};
+    left: 0;
+    width: 3rem;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+  }
 `
 
 const EmployeeDetails = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${sizes.spaceXS};
+  gap: ${sizes.spaceMD};
 `
 
 const DetailRow = styled.div`
@@ -313,29 +376,76 @@ const DetailRow = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: ${sizes.employeeDetails};
+  padding: ${sizes.spaceSM} 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  &:last-child {
+    border-bottom: none;
+  }
 `
 
 const DetailLabel = styled.span`
-  font-weight: 500;
-  opacity: 0.9;
+  font-weight: 600;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  
+  /* Add icons based on content */
+  &::before {
+    content: '📱';
+    margin-right: ${sizes.spaceXS};
+    font-size: 0.9em;
+  }
+  
+  /* Phone label */
+  ${props => props.children === 'Phone:' && `
+    &::before {
+      content: '📱';
+    }
+  `}
+  
+  /* Salary label */
+  ${props => props.children === 'Salary:' && `
+    &::before {
+      content: '💰';
+    }
+  `}
+  
+  /* Tier label */
+  ${props => props.children === 'Tier:' && `
+    &::before {
+      content: '🏆';
+    }
+  `}
+  
+  /* Reports to label */
+  ${props => props.children === 'Reports to:' && `
+    &::before {
+      content: '👤';
+    }
+  `}
 `
 
 const DetailValue = styled.span`
-  font-weight: 600;
+  font-weight: 700;
   text-align: right;
+  flex-shrink: 0;
   
   a {
     color: inherit;
     text-decoration: none;
+    transition: all 0.2s ease;
     
     &:hover {
       text-decoration: underline;
+      opacity: 0.8;
     }
   }
   
   .no-data {
     opacity: 0.6;
     font-style: italic;
+    font-weight: 500;
   }
 `
 
@@ -367,38 +477,71 @@ const CardBack = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${sizes.spaceLG};
+  box-sizing: border-box;
+  overflow: hidden;
 `
 
 // 👥 TEAM SUMMARY (Front of card)
 const TeamSummary = styled.div`
   margin-top: auto;
-  padding-top: ${sizes.spaceMD};
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding: ${sizes.spaceLG} 0 0 0;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
+  
+  /* Add a subtle glow effect */
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+  }
 `
 
 const TeamCount = styled.div`
-  font-size: ${sizes.fontSM};
-  font-weight: 600;
-  opacity: 0.9;
+  font-size: ${sizes.fontLG};
+  font-weight: 700;
+  opacity: 0.95;
+  display: flex;
+  align-items: center;
+  
+  &::before {
+    content: '👥';
+    margin-right: ${sizes.spaceSM};
+    font-size: 1.2em;
+  }
 `
 
 const FlipButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   color: inherit;
-  padding: ${sizes.spaceXS} ${sizes.spaceSM};
-  border-radius: ${sizes.spaceSM};
-  font-size: ${sizes.fontXS};
-  font-weight: 600;
+  padding: ${sizes.spaceMD} ${sizes.spaceLG};
+  border-radius: 1.25rem;
+  font-size: ${sizes.fontSM};
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.25) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
 `
 
@@ -407,33 +550,63 @@ const BackHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: ${sizes.spaceLG};
-  padding-bottom: ${sizes.spaceMD};
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: ${sizes.spaceXL};
+  padding-bottom: ${sizes.spaceLG};
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+  }
 `
 
 const BackTitle = styled.h3`
-  font-size: ${sizes.fontLG};
-  font-weight: 700;
+  font-size: ${sizes.sectionTitle};
+  font-weight: 800;
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  
+  &::before {
+    content: '👑';
+    margin-right: ${sizes.spaceSM};
+    font-size: 1.2em;
+  }
 `
 
 const TeamDetails = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
 `
 
 const TeamStats = styled.div`
   text-align: center;
-  margin-bottom: ${sizes.spaceLG};
-  font-size: ${sizes.fontBase};
+  margin-bottom: ${sizes.spaceXL};
+  padding: ${sizes.spaceLG};
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   
   strong {
-    font-size: ${sizes.fontXL};
+    font-size: ${sizes.font2XL};
+    font-weight: 800;
     display: block;
-    margin-bottom: ${sizes.spaceXS};
+    margin-bottom: ${sizes.spaceSM};
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
+  
+  font-size: ${sizes.fontLG};
+  font-weight: 600;
+  opacity: 0.9;
 `
 
 const TeamList = styled.div`
@@ -442,58 +615,120 @@ const TeamList = styled.div`
   flex-direction: column;
   gap: ${sizes.spaceSM};
   margin-bottom: ${sizes.spaceMD};
-  max-height: 200px;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Important for flex scrolling */
+  
+  /* Custom scrollbar for better UX */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
 `
 
 const TeamMember = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${sizes.spaceSM};
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: ${sizes.spaceSM};
+  padding: ${sizes.spaceLG};
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    transition: left 0.5s ease;
+  }
   
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(4px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
+    transform: translateX(8px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    
+    &::before {
+      left: 100%;
+    }
   }
 `
 
 const MemberInfo = styled.div`
   flex: 1;
+  z-index: 1;
+  position: relative;
 `
 
 const MemberName = styled.div`
-  font-weight: 600;
-  font-size: ${sizes.fontSM};
-  margin-bottom: ${sizes.spaceXS};
+  font-weight: 700;
+  font-size: ${sizes.fontLG};
+  margin-bottom: ${sizes.spaceSM};
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `
 
 const MemberRole = styled.div`
-  font-size: ${sizes.fontXS};
-  opacity: 0.8;
+  font-size: ${sizes.fontSM};
+  opacity: 0.85;
+  font-weight: 600;
 `
 
 const NavigateIcon = styled.div`
   font-weight: 700;
+  font-size: ${sizes.fontLG};
   opacity: 0.6;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  z-index: 1;
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
   
   ${TeamMember}:hover & {
     opacity: 1;
-    transform: translateX(2px);
+    transform: translateX(4px) scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
   }
 `
 
 const TeamHint = styled.div`
-  font-size: ${sizes.fontXS};
-  opacity: 0.7;
+  font-size: ${sizes.fontSM};
+  opacity: 0.8;
   text-align: center;
   font-style: italic;
   margin-top: auto;
+  padding: ${sizes.spaceLG};
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 500;
 `
 
 export default EmployeeCard

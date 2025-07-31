@@ -300,6 +300,10 @@ const Container = styled.div`
   min-height: 100vh;
   padding: ${sizes.space2XL};
   
+  @media (max-width: 1200px) {
+    padding: ${sizes.spaceXL};
+  }
+  
   @media (max-width: 768px) {
     padding: ${sizes.spaceLG};
   }
@@ -497,12 +501,16 @@ const Stats = styled.div`
 
 const EmployeeGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
-  gap: ${sizes.cardGap};
+  grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
+  gap: ${sizes.space2XL};
+  
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+  }
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: ${sizes.spaceLG};
+    gap: ${sizes.spaceXL};
   }
 `
 

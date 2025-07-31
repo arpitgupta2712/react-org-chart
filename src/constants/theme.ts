@@ -1,57 +1,19 @@
-// Main theme configuration combining all design tokens
+// 🎨 SIMPLIFIED THEME - Single source of truth
 
-import { colors, cssColors } from './colors'
-import { typography, cssTypography } from './typography'
-import { spacing, cssSpacing } from './spacing'
-import { shadows, cssShadows } from './shadows'
+import { colors, design } from './colors'
 
-// Main theme object
+// Main theme object using our consolidated design system
 export const theme = {
   colors,
-  typography,
-  spacing,
-  shadows,
+  design,
   
-  // Breakpoints for responsive design
-  breakpoints: {
-    xs: '320px',
-    sm: '640px',
-    md: '768px',
-    lg: '1024px',
-    xl: '1280px',
-    '2xl': '1536px'
-  },
-
-  // Z-index scale
-  zIndex: {
-    base: 0,
-    dropdown: 10,
-    sticky: 20,
-    fixed: 30,
-    modal: 40,
-    popover: 50,
-    tooltip: 60,
-    toast: 70,
-    overlay: 80,
-    max: 9999
-  },
-
-  // Animation/Transition configurations
-  animation: {
-    duration: {
-      fast: '150ms',
-      normal: '300ms',
-      slow: '500ms',
-      slower: '750ms'
-    },
-    easing: {
-      linear: 'linear',
-      easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-      easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
-      easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-    }
-  },
+  // Quick access to common values
+  spacing: design.spacing,
+  typography: design.typography,
+  shadows: design.shadows,
+  animation: design.animation,
+  breakpoints: design.breakpoints,
+  zIndex: design.zIndex,
 
   // Border radius scale
   borderRadius: {
@@ -87,47 +49,71 @@ export const theme = {
   }
 } as const
 
-// Combined CSS custom properties
+// CSS custom properties from our design system
 export const cssVariables = {
-  ...cssColors,
-  ...cssTypography,
-  ...cssSpacing,
-  ...cssShadows,
+  // Colors (main earthy palette)
+  '--color-sage': colors.highlightBorder,
+  '--color-sky': colors.selectedBorder,
+  '--color-terracotta': colors.error,
+  '--color-page-bg': colors.pageBackground,
+  '--color-card-bg': colors.cardBackground,
+  '--color-text-primary': colors.textPrimary,
+  '--color-text-secondary': colors.textSecondary,
+  
+  // Spacing
+  '--space-xs': design.spacing.xs,
+  '--space-sm': design.spacing.sm,
+  '--space-md': design.spacing.md,
+  '--space-lg': design.spacing.lg,
+  '--space-xl': design.spacing.xl,
+  '--space-2xl': design.spacing['2xl'],
+  
+  // Typography
+  '--font-xs': design.typography.fontXS,
+  '--font-sm': design.typography.fontSM,
+  '--font-base': design.typography.fontBase,
+  '--font-lg': design.typography.fontLG,
+  '--font-xl': design.typography.fontXL,
+  '--font-2xl': design.typography.font2XL,
+  
+  // Card System
+  '--card-padding': design.card.padding,
+  '--card-radius': design.card.borderRadius,
+  '--card-min-height': design.card.minHeight,
+  '--card-gap': design.card.gap,
+  
+  // Shadows
+  '--shadow-card': design.shadows.card,
+  '--shadow-card-hover': design.shadows.cardHover,
+  '--shadow-button': design.shadows.button,
+  
+  // Animation
+  '--duration-fast': design.animation.fast,
+  '--duration-normal': design.animation.normal,
+  '--duration-slow': design.animation.slow,
+  '--easing': design.animation.easing,
   
   // Breakpoints
-  '--breakpoint-xs': theme.breakpoints.xs,
-  '--breakpoint-sm': theme.breakpoints.sm,
-  '--breakpoint-md': theme.breakpoints.md,
-  '--breakpoint-lg': theme.breakpoints.lg,
-  '--breakpoint-xl': theme.breakpoints.xl,
-  '--breakpoint-2xl': theme.breakpoints['2xl'],
+  '--breakpoint-sm': design.breakpoints.sm,
+  '--breakpoint-md': design.breakpoints.md,
+  '--breakpoint-lg': design.breakpoints.lg,
+  '--breakpoint-xl': design.breakpoints.xl,
 
   // Z-index
-  '--z-dropdown': theme.zIndex.dropdown.toString(),
-  '--z-modal': theme.zIndex.modal.toString(),
-  '--z-overlay': theme.zIndex.overlay.toString(),
-  '--z-tooltip': theme.zIndex.tooltip.toString(),
-
-  // Animation
-  '--duration-fast': theme.animation.duration.fast,
-  '--duration-normal': theme.animation.duration.normal,
-  '--duration-slow': theme.animation.duration.slow,
-  '--easing-ease-in-out': theme.animation.easing.easeInOut,
-  '--easing-bounce': theme.animation.easing.bounce,
+  '--z-dropdown': design.zIndex.dropdown.toString(),
+  '--z-modal': design.zIndex.modal.toString(),
+  '--z-overlay': design.zIndex.overlay.toString(),
 
   // Border radius
   '--radius-xs': theme.borderRadius.xs,
   '--radius-sm': theme.borderRadius.sm,
-  '--radius-base': theme.borderRadius.base,
   '--radius-md': theme.borderRadius.md,
   '--radius-lg': theme.borderRadius.lg,
   '--radius-xl': theme.borderRadius.xl,
   '--radius-2xl': theme.borderRadius['2xl'],
-  '--radius-full': theme.borderRadius.full,
 
   // Opacity
   '--opacity-10': theme.opacity[10],
-  '--opacity-20': theme.opacity[20],
   '--opacity-30': theme.opacity[30],
   '--opacity-50': theme.opacity[50],
   '--opacity-70': theme.opacity[70],
@@ -162,29 +148,29 @@ export const getThemeValue = <T>(
   return current as T
 }
 
-// Type-safe theme access helpers
+// 🎯 Easy theme access helpers
 export const useTheme = () => ({
   colors: theme.colors,
-  typography: theme.typography,
+  design: theme.design,
   spacing: theme.spacing,
+  typography: theme.typography,
   shadows: theme.shadows,
+  animation: theme.animation,
   breakpoints: theme.breakpoints,
   zIndex: theme.zIndex,
-  animation: theme.animation,
   borderRadius: theme.borderRadius,
   opacity: theme.opacity,
   
   // Helper functions
-  getColor: (path: string, fallback = '#000000') => getThemeValue(`colors.${path}`, fallback),
-  getSpacing: (key: keyof typeof theme.spacing.scale) => theme.spacing.scale[key],
-  getShadow: (path: string, fallback = 'none') => getThemeValue(`shadows.${path}`, fallback),
+  getColor: (colorName: keyof typeof colors, fallback = '#000000') => colors[colorName] || fallback,
+  getSpacing: (spaceName: keyof typeof design.spacing) => design.spacing[spaceName],
+  getShadow: (shadowName: keyof typeof design.shadows) => design.shadows[shadowName],
+  getFont: (fontName: keyof typeof design.typography) => design.typography[fontName],
 })
 
 // Export theme types for TypeScript
 export type Theme = typeof theme
 export type ThemeColors = typeof theme.colors
-export type ThemeTypography = typeof theme.typography
-export type ThemeSpacing = typeof theme.spacing
-export type ThemeShadows = typeof theme.shadows
+export type ThemeDesign = typeof theme.design
 
 export default theme

@@ -90,36 +90,129 @@ export const colors = {
   info: '#6A8CAF'
 }
 
-// 📏 Sizes & Typography - All in one place!
+// 📏 COMPLETE DESIGN SYSTEM - Everything in one place!
+export const design = {
+  // 📦 Spacing Scale
+  spacing: {
+    xs: '0.5rem',     // 8px
+    sm: '0.75rem',    // 12px
+    md: '1rem',       // 16px
+    lg: '1.5rem',     // 24px
+    xl: '2rem',       // 32px
+    '2xl': '3rem',    // 48px
+    '3xl': '4rem',    // 64px
+    '4xl': '5rem',    // 80px
+  },
+
+  // 🎨 Card System
+  card: {
+    padding: '2.5rem',
+    borderRadius: '1.5rem',
+    minHeight: '22rem',
+    gap: '2.5rem',
+    borderWidth: '3px',
+  },
+
+  // 📱 Typography Scale
+  typography: {
+    // Base sizes
+    fontXS: '0.875rem',   // 14px
+    fontSM: '1rem',       // 16px
+    fontBase: '1.125rem', // 18px
+    fontLG: '1.25rem',    // 20px
+    fontXL: '1.375rem',   // 22px
+    font2XL: '1.625rem',  // 26px
+    font3XL: '2rem',      // 32px
+    
+    // Component fonts
+    employeeName: '1.75rem',     // 28px
+    employeeTitle: '1.375rem',   // 22px
+    employeeDetails: '1.125rem', // 18px
+    employeeId: '1rem',          // 16px
+    pageTitle: '2.5rem',         // 40px
+    sectionTitle: '1.25rem',     // 20px
+    
+    // Font weights
+    weightNormal: '400',
+    weightMedium: '500',
+    weightSemiBold: '600',
+    weightBold: '700',
+    weightExtraBold: '800',
+  },
+
+  // 🌫️ Shadows System
+  shadows: {
+    sm: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    md: '0 4px 8px rgba(0, 0, 0, 0.12)',
+    lg: '0 8px 16px rgba(0, 0, 0, 0.15)',
+    xl: '0 12px 24px rgba(0, 0, 0, 0.18)',
+    '2xl': '0 20px 40px rgba(0, 0, 0, 0.2)',
+    
+    // Component shadows
+    card: '0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1)',
+    cardHover: '0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.15)',
+    button: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    buttonHover: '0 6px 16px rgba(0, 0, 0, 0.15)',
+  },
+
+  // 🎭 Animation
+  animation: {
+    fast: '0.15s',
+    normal: '0.3s',
+    slow: '0.5s',
+    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  },
+
+  // 📱 Breakpoints
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
+  },
+
+  // 🎯 Z-index
+  zIndex: {
+    dropdown: 10,
+    modal: 40,
+    tooltip: 60,
+    overlay: 80,
+  }
+}
+
+// 📏 Legacy sizes object for backward compatibility
 export const sizes = {
   // Card Dimensions
-  cardPadding: '1.5rem',
-  cardBorderRadius: '0.75rem', 
-  cardMinHeight: '13rem',
-  cardGap: '1.5rem',
+  cardPadding: design.card.padding,
+  cardBorderRadius: design.card.borderRadius,
+  cardMinHeight: design.card.minHeight,
+  cardGap: design.card.gap,
   
   // Font Sizes
-  fontXS: '0.875rem',
-  fontSM: '1rem', 
-  fontBase: '1.125rem',
-  fontLG: '1.25rem',
-  fontXL: '1.375rem',
-  font2XL: '1.625rem',
+  fontXS: design.typography.fontXS,
+  fontSM: design.typography.fontSM,
+  fontBase: design.typography.fontBase,
+  fontLG: design.typography.fontLG,
+  fontXL: design.typography.fontXL,
+  font2XL: design.typography.font2XL,
   
   // Component-specific fonts
-  employeeName: '1.25rem',
-  employeeTitle: '1.0625rem', 
-  employeeDetails: '0.9375rem',
-  employeeId: '0.875rem',
-  pageTitle: '2rem',
+  employeeName: design.typography.employeeName,
+  employeeTitle: design.typography.employeeTitle,
+  employeeDetails: design.typography.employeeDetails,
+  employeeId: design.typography.employeeId,
+  pageTitle: design.typography.pageTitle,
+  sectionTitle: design.typography.sectionTitle,
   
   // Spacing
-  spaceXS: '0.25rem',
-  spaceSM: '0.5rem', 
-  spaceMD: '0.75rem',
-  spaceLG: '1rem',
-  spaceXL: '1.5rem',
-  space2XL: '2rem'
+  spaceXS: design.spacing.xs,
+  spaceSM: design.spacing.sm,
+  spaceMD: design.spacing.md,
+  spaceLG: design.spacing.lg,
+  spaceXL: design.spacing.xl,
+  space2XL: design.spacing['2xl'],
 }
 
 // 🎯 Helper function - Get tier colors easily
