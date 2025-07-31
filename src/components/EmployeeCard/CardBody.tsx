@@ -2,7 +2,7 @@ import React from 'react'
 import { Employee } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
 import { EmailIcon, CalendarIcon, UserIcon, ShieldIcon } from '../icons'
-import { formatDate } from '../../utils/formatters'
+import { RelativeTime } from '../common/RelativeTime'
 import {
   CardBody as StyledCardBody,
   EmployeeTitle,
@@ -50,11 +50,7 @@ export const CardBody: React.FC<CardBodyProps> = ({
         <DetailRow>
           <DetailLabel><CalendarIcon /> Joined:</DetailLabel>
           <DetailValue>
-            {rawEmployee?.date_of_joining ? (
-              formatDate(rawEmployee.date_of_joining)
-            ) : (
-              <MissingData>No date recorded</MissingData>
-            )}
+            <RelativeTime dateString={rawEmployee?.date_of_joining} />
           </DetailValue>
         </DetailRow>
         
