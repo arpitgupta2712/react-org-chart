@@ -79,7 +79,7 @@ export const cssVariables = {
   // Card System
   '--card-padding': design.card.padding,
   '--card-radius': design.card.borderRadius,
-  '--card-min-height': design.card.minHeight,
+
   '--card-gap': design.card.gap,
   
   // Shadows

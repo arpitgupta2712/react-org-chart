@@ -168,9 +168,14 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                 )}
               </EmployeeSubtitle>
             </EmployeeInfo>
-            <EmployeeId>
-          {rawEmployee?.company_id || employee.id}
-            </EmployeeId>
+            <HeaderRight>
+              <TierBadge tier={employee.tier}>
+                {getTierName(employee.tier)}
+              </TierBadge>
+              <EmployeeId>
+                {rawEmployee?.company_id || employee.id}
+              </EmployeeId>
+            </HeaderRight>
           </CardHeader>
 
       {/* Card Body */}
@@ -217,12 +222,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                 </DetailValue>
               </DetailRow>
               
-              {showTier && (
-                <DetailRow>
-                  <DetailLabel><CrownIcon /> Tier:</DetailLabel>
-                  <DetailValue>{getTierName(employee.tier)}</DetailValue>
-                </DetailRow>
-          )}
+
           
           {showManager && employee.parentId && managerName && (
                 <DetailRow>
@@ -310,7 +310,8 @@ const StyledEmployeeCard = styled.div<{
   }};
   border-radius: ${sizes.cardBorderRadius};
   padding: ${props => props.compact ? '2rem' : sizes.cardPadding};
-  min-height: ${props => props.compact ? '18rem' : sizes.cardMinHeight};
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
@@ -394,6 +395,35 @@ const EmployeeInfo = styled.div`
   margin-right: ${sizes.spaceMD};
 `
 
+const HeaderRight = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: ${sizes.spaceSM};
+`
+
+const TierBadge = styled.div<{ tier: number }>`
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    inset 0 1px 2px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  text-align: center;
+`
+
+
+
 const EmployeeName = styled.div`
   font-size: ${sizes.employeeName};
   font-weight: 800;
@@ -451,7 +481,7 @@ const EmployeeId = styled.div`
 `
 
 const CardBody = styled.div`
-  flex: 1;
+  flex-grow: 1; /* Allow body to take up remaining space */
   position: relative;
   z-index: 1;
 `
@@ -568,7 +598,8 @@ const MissingData = styled.span`
 const FlipContainer = styled.div<{ isFlipped: boolean }>`
   position: relative;
   width: 100%;
-  height: 100%;
+  flex-grow: 1; /* Grow to fill available space */
+  min-height: 25rem; /* ⚡️ CRITICAL: Provide height for absolutely positioned children */
   transform-style: preserve-3d;
   transition: transform 0.6s ease;
   transform: ${props => props.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'};
@@ -581,7 +612,7 @@ const CardFront = styled.div`
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-`
+`;
 
 const CardBack = styled.div`
   position: absolute;

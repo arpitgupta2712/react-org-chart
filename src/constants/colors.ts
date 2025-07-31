@@ -108,7 +108,6 @@ export const design = {
   card: {
     padding: '2.5rem',
     borderRadius: '1.5rem',
-    minHeight: '28rem',
     gap: '2.5rem',
     borderWidth: '3px',
   },
@@ -187,7 +186,7 @@ export const sizes = {
   // Card Dimensions
   cardPadding: design.card.padding,
   cardBorderRadius: design.card.borderRadius,
-  cardMinHeight: design.card.minHeight,
+
   cardGap: design.card.gap,
   
   // Font Sizes
