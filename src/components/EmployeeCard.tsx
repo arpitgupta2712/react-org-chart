@@ -157,14 +157,16 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
           <CardHeader>
             <EmployeeInfo>
               <EmployeeName>{employee.name}</EmployeeName>
-              {rawEmployee?.phone && (
-                <EmployeeSubtitle>
-                  <PhoneIcon />
+              <EmployeeSubtitle>
+                <PhoneIcon />
+                {rawEmployee?.phone ? (
                   <a href={`tel:${rawEmployee.phone}`}>
                     {formatPhone(rawEmployee.phone)}
                   </a>
-                </EmployeeSubtitle>
-              )}
+                ) : (
+                  <MissingData>Phone not provided</MissingData>
+                )}
+              </EmployeeSubtitle>
             </EmployeeInfo>
             <EmployeeId>
           {rawEmployee?.company_id || employee.id}
@@ -177,32 +179,43 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         
         {/* Employee Details */}
             <EmployeeDetails>
-              {rawEmployee?.company_email_id && (
-                <DetailRow>
-                  <DetailLabel><EmailIcon /> Email:</DetailLabel>
-                  <DetailValue>
+              {/* Email - Always show */}
+              <DetailRow>
+                <DetailLabel><EmailIcon /> Email:</DetailLabel>
+                <DetailValue>
+                  {rawEmployee?.company_email_id ? (
                     <a href={`mailto:${rawEmployee.company_email_id}`}>
                       {rawEmployee.company_email_id}
                     </a>
-                  </DetailValue>
-                </DetailRow>
-              )}
+                  ) : (
+                    <MissingData>Email not provided</MissingData>
+                  )}
+                </DetailValue>
+              </DetailRow>
               
-              {rawEmployee?.date_of_joining && (
-                <DetailRow>
-                  <DetailLabel><CalendarIcon /> Joined:</DetailLabel>
-                  <DetailValue>{formatDate(rawEmployee.date_of_joining)}</DetailValue>
-                </DetailRow>
-              )}
+              {/* Joining Date - Always show */}
+              <DetailRow>
+                <DetailLabel><CalendarIcon /> Joined:</DetailLabel>
+                <DetailValue>
+                  {rawEmployee?.date_of_joining ? (
+                    formatDate(rawEmployee.date_of_joining)
+                  ) : (
+                    <MissingData>Date not recorded</MissingData>
+                  )}
+                </DetailValue>
+              </DetailRow>
               
-              {rawEmployee?.company_billed_to && (
-                <DetailRow>
-                  <DetailLabel><BuildingIcon /> Company:</DetailLabel>
-                  <DetailValue>
+              {/* Company - Always show */}
+              <DetailRow>
+                <DetailLabel><BuildingIcon /> Company:</DetailLabel>
+                <DetailValue>
+                  {rawEmployee?.company_billed_to ? (
                     <CompanyTag>{rawEmployee.company_billed_to}</CompanyTag>
-                  </DetailValue>
-                </DetailRow>
-              )}
+                  ) : (
+                    <MissingData>Company not assigned</MissingData>
+                  )}
+                </DetailValue>
+              </DetailRow>
               
               {showTier && (
                 <DetailRow>
@@ -531,6 +544,37 @@ const DetailValue = styled.span`
     opacity: 0.6;
     font-style: italic;
     font-weight: 500;
+  }
+`
+
+const MissingData = styled.span`
+  color: ${colors.warning};
+  font-style: italic;
+  font-size: 0.9em;
+  font-weight: 600;
+  opacity: 0.85;
+  border: 1px dashed ${colors.warning};
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.35rem;
+  background: rgba(199, 165, 116, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: help;
+  white-space: nowrap;
+  display: inline-block;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    background: ${colors.warning};
+    color: white;
+    border-color: ${colors.warning};
+    box-shadow: 0 4px 12px rgba(199, 165, 116, 0.3);
+  }
+
+  &::before {
+    content: "⚠️ ";
+    margin-right: 0.25rem;
+    font-size: 0.8em;
   }
 `
 

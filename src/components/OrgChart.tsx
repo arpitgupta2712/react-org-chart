@@ -243,9 +243,6 @@ const OrgChart: React.FC = () => {
       <Stats>
         <strong>📊 Organization Overview:</strong>{' '}
         Showing {stats.filtered} of {stats.total} employees |{' '}
-        {stats.managers} managers |{' '}
-        {stats.tiers} tiers |{' '}
-        Avg salary: ₹{stats.avgSalary.toLocaleString()} |{' '}
         Largest team: {stats.largestTeam} reports
       </Stats>
 
