@@ -2,6 +2,7 @@ import React from 'react'
 import {
   HeaderContainer,
   HeaderContent,
+  HeaderTextContent,
   CompanyTitle,
   CompanySubtitle,
   HeaderIcon,
@@ -18,12 +19,12 @@ export const AppHeader: React.FC = () => {
   return (
     <HeaderContainer>
       <HeaderContent>
-        <div>
+        <HeaderTextContent>
           <CompanyTitle>GoalTech Innovation</CompanyTitle>
           <CompanySubtitle>
             <TechStack>{employees.length} Employees</TechStack> • <TechStack>{formatDate(currentTime)}</TechStack> • <TechStack>{formatTime(currentTime)}</TechStack>
           </CompanySubtitle>
-        </div>
+        </HeaderTextContent>
         <HeaderIcon>
           <img src="/logo.png" alt="GoalTech Logo" />
         </HeaderIcon>

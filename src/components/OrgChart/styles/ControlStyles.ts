@@ -2,99 +2,94 @@ import styled from 'styled-components'
 import { colors, sizes } from '../../../constants/colors'
 
 export const Controls = styled.div<{ isExpanded: boolean }>`
-  background: ${colors.cardBackground};
-  border-radius: ${sizes.cardBorderRadius};
+  background: transparent;
   margin-bottom: ${sizes.spaceXL};
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.15),
-    0 4px 10px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Subtle pattern overlay similar to employee cards */
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-    pointer-events: none;
-  }
-
-  /* Ensure content is above pattern */
-  > * {
-    position: relative;
-    z-index: 1;
-  }
 `
 
 export const ControlsHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: ${sizes.spaceLG} ${sizes.spaceXL};
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  min-height: 60px;
-  backdrop-filter: blur(10px);
-  gap: ${sizes.spaceLG};
+  padding: ${sizes.spaceMD} 0;
   
   @media (max-width: 768px) {
-    padding: ${sizes.spaceMD} ${sizes.spaceLG};
     flex-direction: column;
     gap: ${sizes.spaceMD};
-    align-items: stretch;
   }
 `
 
 export const ControlsContent = styled.div<{ isExpanded: boolean }>`
-  padding: ${props => props.isExpanded ? `${sizes.spaceLG} ${sizes.spaceXL}` : '0'};
+  padding: ${props => props.isExpanded ? `${sizes.spaceMD} 0` : '0'};
   max-height: ${props => props.isExpanded ? '300px' : '0'};
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: ${props => props.isExpanded ? '1' : '0'};
-  
-  @media (max-width: 768px) {
-    padding: ${props => props.isExpanded ? `${sizes.spaceMD} ${sizes.spaceLG}` : '0'};
-  }
 `
 
 
 
 export const ToggleButton = styled.button<{ isExpanded: boolean }>`
-  padding: ${sizes.spaceSM} ${sizes.spaceLG};
+  padding: ${sizes.spaceMD} ${sizes.spaceLG};
   background: ${props => props.isExpanded 
-    ? `linear-gradient(135deg, ${colors.highlightBorder} 0%, ${colors.selectedBorder} 100%)`
-    : `linear-gradient(135deg, ${colors.textSecondary} 0%, ${colors.textLight} 100%)`
+    ? colors.highlightBorder
+    : colors.textSecondary
   };
   color: white;
-  border: none;
-  border-radius: ${sizes.spaceSM};
+  border: ${props => props.isExpanded 
+    ? `2px solid ${colors.selectedBorder}`
+    : '2px solid transparent'
+  };
+  border-radius: ${sizes.spaceMD};
   font-size: ${sizes.fontSM};
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: ${props => props.isExpanded 
+    ? `0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 0 3px rgba(124, 152, 133, 0.3)`
+    : `0 6px 16px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+  };
+  position: relative;
+  
+  /* Active state indicator */
+  ${props => props.isExpanded && `
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: ${colors.highlightBorder};
+      border-radius: ${sizes.spaceMD};
+      z-index: -1;
+      opacity: 0.2;
+    }
+  `}
   
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 
-      0 6px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: ${props => props.isExpanded 
+      ? `0 10px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 0 3px rgba(124, 152, 133, 0.4)`
+      : `0 8px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25)`
+    };
   }
   
   &:active {
     transform: translateY(0);
+  }
+  
+  /* Icon sizing */
+  svg {
+    width: 20px;
+    height: 20px;
+    
+    /* Add margin only when there's text after the icon */
+    &:not(:only-child) {
+      margin-right: ${sizes.spaceXS};
+    }
   }
 `
 
@@ -134,37 +129,38 @@ export const FilterLabel = styled.label`
 export const ControlGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: ${sizes.spaceSM};
+  gap: ${sizes.spaceMD};
   min-width: 0; /* Prevents flex items from overflowing */
+  flex-wrap: wrap;
   
   @media (max-width: 768px) {
-    justify-content: space-between;
-    flex-wrap: wrap;
+    justify-content: center;
+    gap: ${sizes.spaceSM};
   }
 `
 
 export const FilterSelect = styled.select`
-  padding: ${sizes.spaceSM} ${sizes.spaceMD};
+  padding: ${sizes.spaceMD} ${sizes.spaceLG};
   border: 2px solid ${colors.borderDefault};
-  border-radius: ${sizes.spaceSM};
+  border-radius: ${sizes.spaceMD};
   font-size: ${sizes.fontSM};
-  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  background: white;
   cursor: pointer;
   min-width: 180px;
   max-width: 220px;
   font-weight: 500;
   color: ${colors.textPrimary};
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transition: all 0.2s ease;
   
   &:hover {
     border-color: ${colors.selectedBorder};
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    transform: translateY(-1px);
+    background: #f8f9fa;
+    transform: translateY(-2px);
     box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.15),
+      0 6px 16px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }
   
@@ -189,26 +185,26 @@ export const FilterSelect = styled.select`
 `
 
 export const SearchInput = styled.input`
-  padding: ${sizes.spaceSM} ${sizes.spaceMD};
+  padding: ${sizes.spaceMD} ${sizes.spaceLG};
   border: 2px solid ${colors.borderDefault};
-  border-radius: ${sizes.spaceSM};
+  border-radius: ${sizes.spaceMD};
   font-size: ${sizes.fontSM};
   min-width: 250px;
   flex: 1;
-  background: linear-gradient(135deg, white 0%, #f8f9fa 100%);
+  background: white;
   font-weight: 500;
   color: ${colors.textPrimary};
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transition: all 0.2s ease;
   
   &:hover {
     border-color: ${colors.selectedBorder};
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    transform: translateY(-1px);
+    background: #f8f9fa;
+    transform: translateY(-2px);
     box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.15),
+      0 6px 16px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.5);
   }
   
@@ -234,30 +230,33 @@ export const SearchInput = styled.input`
 
 
 
-export const ResetButton = styled.button`
-  padding: ${sizes.spaceSM} ${sizes.spaceMD};
-  background: linear-gradient(135deg, ${colors.textLight} 0%, ${colors.textSecondary} 100%);
-  color: white;
-  border: none;
-  border-radius: ${sizes.spaceSM};
+export const ResetButton = styled.button<{ disabled?: boolean }>`
+  padding: ${sizes.spaceMD} ${sizes.spaceLG};
+  background: ${props => props.disabled ? colors.borderDefault : colors.textLight};
+  color: ${props => props.disabled ? colors.textLight : 'white'};
+  border: ${props => props.disabled ? `2px solid transparent` : `2px solid transparent`};
+  border-radius: ${sizes.spaceMD};
   font-size: ${sizes.fontSM};
   font-weight: 700;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   transition: all 0.2s ease;
   min-width: 44px;
-  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 6px 16px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  opacity: ${props => props.disabled ? 0.5 : 1};
   
-  &:hover {
-    background: linear-gradient(135deg, ${colors.textSecondary} 0%, #495057 100%);
-    transform: translateY(-1px);
+  &:hover:not(:disabled) {
+    background: ${colors.textSecondary};
+    transform: translateY(-2px);
     box-shadow: 
-      0 6px 16px rgba(0, 0, 0, 0.2),
+      0 8px 20px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
   }
   
@@ -266,5 +265,11 @@ export const ResetButton = styled.button`
     box-shadow: 
       0 2px 8px rgba(0, 0, 0, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Icon sizing */
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `

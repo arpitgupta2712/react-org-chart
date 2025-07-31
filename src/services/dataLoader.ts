@@ -6,14 +6,31 @@ export interface RawEmployee {
   employee_id: string;
   company_id: string;
   employee_name: string;
-  designation: string;
+  nickname?: string;
+  phone: string;
   salary_package: number;
   employment_status: string;
-  company_email_id: string;
-  phone: string;
+  company_billed_to: string;
+  fathers_name?: string;
+  date_of_birth?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  pan_number?: string;
+  created_at?: string;
+  updated_at?: string;
   date_of_joining: string;
+  designation: string;
+  conveyance?: string;
+  pf_registered?: string;
+  salary_bank_account?: string;
+  IFSC_code?: string;
+  name_on_bank?: string;
+  bank_name?: string;
+  company_email_id: string;
+  personal_email_id?: string;
+  aadhaar_number?: string;
   reporting_to: string | null;
-  company_billed_to: string; // 🏢 Company the employee is billed to
 }
 
 export class EmployeeDataLoader {

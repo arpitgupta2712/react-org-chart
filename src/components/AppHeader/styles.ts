@@ -1,6 +1,17 @@
 import styled from 'styled-components'
 import { colors, sizes } from '../../constants/colors'
 
+export const HeaderTextContent = styled.div`
+  flex: 1;
+  min-width: 0; /* Allow text to truncate if needed */
+  
+  @media (max-width: 480px) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+`
+
 export const HeaderContainer = styled.header`
   background: ${colors.cardBackground};
   margin: ${sizes.spaceLG};
@@ -26,8 +37,15 @@ export const HeaderContainer = styled.header`
     pointer-events: none;
   }
   
+  /* Compact design for narrow screens */
   @media (max-width: 768px) {
-    margin: ${sizes.spaceMD} ${sizes.spaceMD} 0;
+    margin: ${sizes.spaceSM};
+    border-radius: ${sizes.spaceMD};
+  }
+  
+  @media (max-width: 480px) {
+    margin: ${sizes.spaceXS} ${sizes.spaceXS} 0;
+    border-radius: ${sizes.spaceSM};
   }
 `
 
@@ -40,14 +58,21 @@ export const HeaderContent = styled.div`
   justify-content: space-between;
   
   @media (max-width: 768px) {
-    padding: ${sizes.spaceLG};
-    flex-direction: column;
-    text-align: center;
-    gap: ${sizes.spaceMD};
+    padding: ${sizes.spaceMD};
+    flex-direction: row;
+    align-items: center;
+    gap: ${sizes.spaceSM};
+  }
+  
+  @media (max-width: 480px) {
+    padding: ${sizes.spaceSM};
+    gap: ${sizes.spaceXS};
   }
 `
 
 export const HeaderIcon = styled.div`
+  flex-shrink: 0;
+  
   img {
     width: 160px;
     height: 160px;
@@ -57,8 +82,15 @@ export const HeaderIcon = styled.div`
   
   @media (max-width: 768px) {
     img {
-      width: 96px;
-      height: 96px;
+      width: 64px;
+      height: 64px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    img {
+      width: 36px;
+      height: 36px;
     }
   }
 `
@@ -76,7 +108,14 @@ export const CompanyTitle = styled.h1`
   letter-spacing: -0.02em;
   
   @media (max-width: 768px) {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
+    margin: 0 0 ${sizes.spaceXS} 0;
+    line-height: 1.2;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1.125rem;
+    margin: 0;
   }
 `
 
@@ -90,9 +129,19 @@ export const CompanySubtitle = styled.p`
   gap: ${sizes.spaceSM};
   
   @media (max-width: 768px) {
-    font-size: ${sizes.fontBase};
+    font-size: ${sizes.fontSM};
+    gap: ${sizes.spaceXS};
     flex-wrap: wrap;
-    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: ${sizes.fontXS};
+    gap: 2px;
+    
+    /* Stack vertically on very narrow screens */
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.3;
   }
 `
 
@@ -109,11 +158,25 @@ export const TechStack = styled.span`
     0 2px 8px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.2s ease;
+  white-space: nowrap;
   
   &:hover {
     transform: translateY(-1px);
     box-shadow: 
       0 4px 12px rgba(0, 0, 0, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: ${sizes.fontXS};
+    padding: 2px ${sizes.spaceXS};
+    letter-spacing: 0.25px;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 1px 6px;
+    letter-spacing: 0;
+    border-radius: 3px;
   }
 `

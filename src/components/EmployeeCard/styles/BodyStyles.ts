@@ -99,3 +99,58 @@ export const ExecutiveStatus = styled.span`
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 `
 
+export const TruncatedText = styled.span`
+  position: relative;
+  cursor: help;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`
+
+export const TooltipContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`
+
+export const Tooltip = styled.div<{ visible: boolean }>`
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: ${sizes.spaceSM} ${sizes.spaceMD};
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 500;
+  white-space: nowrap;
+  max-width: 250px;
+  word-wrap: break-word;
+  white-space: normal;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  opacity: ${props => props.visible ? 1 : 0};
+  visibility: ${props => props.visible ? 'visible' : 'hidden'};
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: ${sizes.spaceMD};
+    border: 4px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  &:hover {
+    cursor: pointer;
+  }
+`
+
+export const CopyHint = styled.div`
+  font-size: 0.7em;
+  opacity: 0.7;
+  margin-top: ${sizes.spaceXS};
+  font-style: italic;
+`
+

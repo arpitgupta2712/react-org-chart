@@ -15,8 +15,7 @@ import {
   ShieldIcon, 
   SettingsIcon, 
   ResetIcon,
-  BuildingIcon,
-  SortIcon
+  BuildingIcon
 } from '../../icons'
 
 interface ControlsProps {
@@ -65,24 +64,27 @@ export const Controls: React.FC<ControlsProps> = ({
           <ToggleButton 
             onClick={() => setIsExpanded(!isExpanded)}
             isExpanded={isExpanded}
+            title={isExpanded ? 'Hide Filters' : 'Show Filters'}
           >
-            <SettingsIcon /> {isExpanded ? 'Hide Filters' : 'Show Filters'}
+            <SettingsIcon />
           </ToggleButton>
           
           <ToggleButton
             onClick={() => onSortChange(sortBy === 'date' ? 'name' : 'date')}
-            isExpanded={false}
+            isExpanded={sortBy === 'date'}
             title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
           >
-            <SortIcon /> {sortBy === 'date' ? 'By Date' : 'By Name'}
+            {sortBy === 'date' ? 'Sort By Date' : 'Sort By Name'}
           </ToggleButton>
-        </ControlGroup>
-        
-        {activeFilters.length > 0 && (
-          <ResetButton onClick={onReset} title="Reset All Filters">
-            <ResetIcon /> Reset Filters
+          
+          <ResetButton 
+            onClick={onReset} 
+            title="Reset All Filters"
+            disabled={activeFilters.length === 0}
+          >
+            <ResetIcon />
           </ResetButton>
-        )}
+        </ControlGroup>
       </ControlsHeader>
 
       {/* Expandable Content */}

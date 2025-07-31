@@ -3,7 +3,7 @@ import { colors, sizes } from '../../../constants/colors'
 
 export const Container = styled.div`
   font-family: 'PT Sans', sans-serif;
-  background: ${colors.appBackground};
+  background: ${colors.cardBackground};
   min-height: 100vh;
   padding: ${sizes.space2XL};
   
