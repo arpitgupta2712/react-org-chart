@@ -164,7 +164,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                     {formatPhone(rawEmployee.phone)}
                   </a>
                 ) : (
-                  <MissingData>Phone not provided</MissingData>
+                  <MissingData>No phone provided</MissingData>
                 )}
               </EmployeeSubtitle>
             </EmployeeInfo>
@@ -188,7 +188,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                       {rawEmployee.company_email_id}
                     </a>
                   ) : (
-                    <MissingData>Email not provided</MissingData>
+                    <MissingData>No email provided</MissingData>
                   )}
                 </DetailValue>
               </DetailRow>
@@ -200,7 +200,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                   {rawEmployee?.date_of_joining ? (
                     formatDate(rawEmployee.date_of_joining)
                   ) : (
-                    <MissingData>Date not recorded</MissingData>
+                    <MissingData>No date recorded</MissingData>
                   )}
                 </DetailValue>
               </DetailRow>
@@ -212,7 +212,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
                   {rawEmployee?.company_billed_to ? (
                     <CompanyTag>{rawEmployee.company_billed_to}</CompanyTag>
                   ) : (
-                    <MissingData>Company not assigned</MissingData>
+                    <MissingData>No company assigned</MissingData>
                   )}
                 </DetailValue>
               </DetailRow>
@@ -548,33 +548,19 @@ const DetailValue = styled.span`
 `
 
 const MissingData = styled.span`
-  color: ${colors.warning};
   font-style: italic;
-  font-size: 0.9em;
-  font-weight: 600;
-  opacity: 0.85;
-  border: 1px dashed ${colors.warning};
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.35rem;
-  background: rgba(199, 165, 116, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.85em;
+  font-weight: 500;
+  opacity: 0.7;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
   cursor: help;
-  white-space: nowrap;
-  display: inline-block;
+  transition: opacity 0.2s ease;
 
   &:hover {
-    opacity: 1;
-    transform: scale(1.05);
-    background: ${colors.warning};
-    color: white;
-    border-color: ${colors.warning};
-    box-shadow: 0 4px 12px rgba(199, 165, 116, 0.3);
-  }
-
-  &::before {
-    content: "⚠️ ";
-    margin-right: 0.25rem;
-    font-size: 0.8em;
+    opacity: 0.9;
   }
 `
 
