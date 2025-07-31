@@ -27,8 +27,11 @@ const OrgChart: React.FC = () => {
     setSearchQuery,
     designationFilter,
     setDesignationFilter,
+    tierFilter,
+    setTierFilter,
     filteredEmployees,
     designations,
+    tiers,
     resetFilters
   } = useEmployeeFiltering(employees, rawEmployees)
 
@@ -98,7 +101,10 @@ const OrgChart: React.FC = () => {
         onSearchChange={setSearchQuery}
         designationFilter={designationFilter}
         onDesignationFilterChange={setDesignationFilter}
+        tierFilter={tierFilter}
+        onTierFilterChange={setTierFilter}
         designations={designations}
+        tiers={tiers}
         employeeCounts={employeeCounts}
         onExpandAll={handleExpandAll}
         onCollapseAll={handleCollapseAll}
@@ -118,6 +124,7 @@ const OrgChart: React.FC = () => {
         getAllSubordinates={getAllSubordinates}
         searchQuery={searchQuery}
         designationFilter={designationFilter}
+        tierFilter={tierFilter}
         onResetFilters={resetFilters}
       />
     </Container>

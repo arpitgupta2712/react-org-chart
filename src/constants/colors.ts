@@ -226,15 +226,15 @@ export const getTierColors = (tier: number): {
   return (colors[tierKey] as any) || colors.tier1
 }
 
-// 🎨 Color Palette Reference Guide
+// 🎨 Color Palette Reference Guide (matches getHierarchyLabel from types.ts)
 export const colorPaletteGuide = {
-  tier1: { name: 'Forest Green', hex: '#7C9885', usage: 'CEO/Leadership' },
+  tier1: { name: 'Forest Green', hex: '#7C9885', usage: 'Executive' },
   tier2: { name: 'Warm Clay', hex: '#A67C6D', usage: 'Senior Management' },
   tier3: { name: 'Dusty Blue', hex: '#6A8CAF', usage: 'Middle Management' },
-  tier4: { name: 'Warm Sand', hex: '#C7B299', usage: 'Team Leads' },
-  tier5: { name: 'Olive', hex: '#8A9A7E', usage: 'Specialists' },
-  tier6: { name: 'Taupe', hex: '#B89F93', usage: 'Support Staff' },
-  tier7: { name: 'Storm', hex: '#7A8E95', usage: 'Technical Staff' },
+  tier4: { name: 'Warm Sand', hex: '#C7B299', usage: 'Team Leaders' },
+  tier5: { name: 'Olive', hex: '#8A9A7E', usage: 'Senior Staff' },
+  tier6: { name: 'Taupe', hex: '#B89F93', usage: 'Staff' },
+  tier7: { name: 'Storm', hex: '#7A8E95', usage: 'Junior Staff' },
   tier8: { name: 'Neutral Gray', hex: '#9A9A9A', usage: 'Entry Level' }
 }
 

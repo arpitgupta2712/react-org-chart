@@ -16,6 +16,7 @@ interface EmployeeGridComponentProps {
   getAllSubordinates: (employeeId: string) => Set<string>
   searchQuery: string
   designationFilter: string
+  tierFilter: number | ''
   onResetFilters: () => void
 }
 
@@ -30,6 +31,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   getAllSubordinates,
   searchQuery,
   designationFilter,
+  tierFilter,
   onResetFilters
 }) => {
   if (employees.length === 0) {
