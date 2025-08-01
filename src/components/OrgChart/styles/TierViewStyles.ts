@@ -6,12 +6,11 @@ export const TierViewContainer = styled.div`
   font-family: ${design.typography.fontFamily};
   height: 100vh;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  flex-direction: row;
   position: relative;
-  padding: 0.75rem;
-  padding-bottom: 5rem; /* Space for fixed bottom navigation */
-  gap: 0.5rem;
+  overflow: hidden;
+  background: none;
+  box-shadow: none;
   
 
 
@@ -19,48 +18,62 @@ export const TierViewContainer = styled.div`
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 
-  /* Hierarchy Breadcrumb Styling */
-  .hierarchy-breadcrumb {
-    flex: 0 0 auto;
-    margin: 0.5rem 0;
-    padding: 0.75rem;
-    background: ${colors.appBackground};
-    border-radius: 0.5rem;
-    border: 1px solid ${colors.borderLight};
-    box-shadow: ${design.shadows.sm};
+  .breadcrumb-sidebar {
+    width: 20%;
+    min-width: 180px;
+    max-width: 220px;
+    border-right: 2px solid ${colors.borderLight};
+    padding: 1rem 2rem 1rem 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
   }
 
   .breadcrumb-label {
-    font-size: 0.75rem;
-    font-weight: ${design.typography.weightMedium};
-    color: ${colors.textSecondary};
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+    font-weight: ${design.typography.weightBold};
+    color: ${colors.textPrimary};
+    margin-bottom: 1rem;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid ${colors.borderLight};
   }
 
   .breadcrumb-trail {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    overflow-x: auto;
-    padding: 0.25rem 0;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
   }
 
   .breadcrumb-item {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.25rem;
     flex-shrink: 0;
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0.75rem;
+    padding-bottom: 5rem;
+    gap: 0.75rem;
+    background: none;
+    box-shadow: none;
+    border: none;
   }
 
   .breadcrumb-card {
     border-radius: 0.5rem;
     padding: 0.75rem;
-    min-width: 150px;
+    width: 100%;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: ${design.shadows.md};
+    box-shadow: ${design.shadows.sm};
     position: relative;
 
     /* Apply tier-based colors dynamically */
@@ -81,8 +94,9 @@ export const TierViewContainer = styled.div`
     }}
 
     &.current {
-      box-shadow: 0 0 0 3px rgba(127, 163, 184, 0.3), ${design.shadows.lg};
-      transform: translateY(-2px);
+      box-shadow: 0 0 0 3px rgba(127, 163, 184, 0.3), ${design.shadows.md};
+      transform: translateX(4px);
+      border-left-width: 4px;
     }
 
     &.ancestor {
@@ -90,8 +104,8 @@ export const TierViewContainer = styled.div`
       
       &:hover {
         opacity: 1;
-        transform: translateY(-2px);
-        box-shadow: ${design.shadows.lg};
+        transform: translateX(2px);
+        box-shadow: ${design.shadows.md};
       }
     }
   }
@@ -148,36 +162,76 @@ export const TierViewContainer = styled.div`
     }
   }
 
+  /* Enhanced visual differentiation for primary vs secondary cards */
+  .primary-tier {
+    position: relative;
+    
+    /* Subtle blue gradient background for primary card */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.05));
+      border-radius: 0.75rem;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .card-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  .secondary-tier {
+    position: relative;
+    
+    /* Subtle green gradient background for secondary card */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.04));
+      border-radius: 0.75rem;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .card-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
   @media (max-width: 768px) {
-    padding: 0.5rem;
-    padding-bottom: 4.5rem; /* Smaller space for mobile bottom nav */
-    gap: 0.375rem;
-
-    .primary-tier {
-      margin-bottom: 0.375rem;
-    }
-
-    .secondary-tier {
-      margin-top: 0.375rem;
-    }
-
-    /* Mobile breadcrumb adjustments */
-    .hierarchy-breadcrumb {
-      margin: 0.375rem 0;
-      padding: 0.5rem;
+    .breadcrumb-sidebar {
+      width: 25%;
+      min-width: 140px;
+      max-width: 160px;
+      padding: 0.75rem;
     }
 
     .breadcrumb-label {
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .breadcrumb-trail {
+      gap: 0.5rem;
     }
 
     .breadcrumb-card {
-      padding: 0.625rem;
-      min-width: 130px;
+      padding: 0.5rem;
     }
 
     .breadcrumb-name {
-      font-size: 1rem;
+      font-size: 0.875rem;
     }
 
     .breadcrumb-position {
@@ -186,6 +240,21 @@ export const TierViewContainer = styled.div`
 
     .breadcrumb-arrow {
       font-size: 1rem;
+      margin: 0.125rem 0;
+    }
+
+    .main-content {
+      padding: 0.5rem;
+      padding-bottom: 4rem;
+      gap: 0.5rem;
+    }
+
+    .primary-tier {
+      margin-bottom: 0.375rem;
+    }
+
+    .secondary-tier {
+      margin-top: 0.375rem;
     }
   }
 `

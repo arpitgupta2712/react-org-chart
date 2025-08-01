@@ -218,42 +218,43 @@ export const TierView: React.FC<TierViewProps> = ({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <ViewInfo>
-        <h3>{currentEmployee.name}</h3>
-        <p>{currentEmployee.position}</p>
-        <div className="selection-count">
-          {currentSiblingIndex + 1} of {siblings.length} colleagues
-        </div>
-      </ViewInfo>
-
-      {/* Hierarchy Breadcrumb Trail - Show path from root to current */}
-      {hierarchyPath.length > 1 && (
-        <div className="hierarchy-breadcrumb">
-          <div className="breadcrumb-label">Path:</div>
-          <div className="breadcrumb-trail">
-            {hierarchyPath.map((pathEmployee, index) => (
-              <div key={pathEmployee.id} className="breadcrumb-item">
-                <div 
-                  className={`breadcrumb-card ${index === currentPositionInPath ? 'current' : 'ancestor'}`}
-                  data-tier={pathEmployee.tier}
-                  onClick={() => setCurrentEmployeeId(pathEmployee.id)}
-                >
-                  <div className="breadcrumb-name">{pathEmployee.name}</div>
-                  <div className="breadcrumb-position">{pathEmployee.position}</div>
-                </div>
-                {index < hierarchyPath.length - 1 && (
-                  <div className="breadcrumb-arrow">→</div>
-                )}
+      {/* Vertical Breadcrumb Sidebar */}
+      <div className="breadcrumb-sidebar">
+        <div className="breadcrumb-label">Hierarchy</div>
+        <div className="breadcrumb-trail">
+          {hierarchyPath.map((pathEmployee, index) => (
+            <div key={pathEmployee.id} className="breadcrumb-item">
+              <div 
+                className={`breadcrumb-card ${index === currentPositionInPath ? 'current' : 'ancestor'}`}
+                data-tier={pathEmployee.tier}
+                onClick={() => setCurrentEmployeeId(pathEmployee.id)}
+              >
+                <div className="breadcrumb-name">{pathEmployee.name}</div>
+                <div className="breadcrumb-position">{pathEmployee.position}</div>
               </div>
-            ))}
-          </div>
+              {index < hierarchyPath.length - 1 && (
+                <div className="breadcrumb-arrow">↓</div>
+              )}
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
-      {/* Current Employee - Always at Top */}
-      <TierRow className="primary-tier">
-        <TierLabel>Selected</TierLabel>
-        <div className="card-wrapper">
+      {/* Main Content Area */}
+      <div className="main-content">
+        
+        {/* Employee Info Header */}
+        <ViewInfo>
+          <h3>{currentEmployee.name}</h3>
+          <p>{currentEmployee.position}</p>
+          <div className="selection-count">
+            {currentSiblingIndex + 1} of {siblings.length} colleagues
+          </div>
+        </ViewInfo>
+
+        {/* Current Employee - Always at Top */}
+        <TierRow className="primary-tier">
+          <div className="card-wrapper">
           <EmployeeCard
             employee={currentEmployee}
             rawEmployee={getRawEmployee(currentEmployee.id)}
@@ -273,7 +274,6 @@ export const TierView: React.FC<TierViewProps> = ({
       {/* Secondary Employee - Direct Report (ONE card only) */}
       {secondaryEmployee && secondaryLabel && (
         <TierRow className="secondary-tier">
-          <TierLabel>{secondaryLabel}</TierLabel>
           <div className="card-wrapper">
             <EmployeeCard
               employee={secondaryEmployee}
@@ -332,6 +332,7 @@ export const TierView: React.FC<TierViewProps> = ({
       <SwipeHint>
         Swipe or use arrow keys to navigate
       </SwipeHint>
+      </div>{/* End of main-content */}
     </TierViewContainer>
   )
 }
