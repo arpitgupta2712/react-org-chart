@@ -16,21 +16,30 @@ import { MissingData } from './styles/CardStyles'
 interface CardHeaderProps {
   employee: Employee
   rawEmployee?: RawEmployee
+  guestMode?: boolean
 }
 
-export const CardHeader: React.FC<CardHeaderProps> = ({ employee, rawEmployee }) => {
+export const CardHeader: React.FC<CardHeaderProps> = ({ employee, rawEmployee, guestMode = false }) => {
   return (
     <StyledCardHeader>
       <EmployeeInfo>
         <EmployeeName>{employee.name}</EmployeeName>
         <EmployeeSubtitle>
-          <PhoneIcon />
-          {rawEmployee?.phone ? (
-            <a href={`tel:${rawEmployee.phone}`}>
-              {formatPhone(rawEmployee.phone)}
-            </a>
+          {guestMode ? (
+            // Show position in guest mode
+            <span>{employee.position}</span>
           ) : (
-            <MissingData>No phone provided</MissingData>
+            // Show phone in normal mode
+            <>
+              <PhoneIcon />
+              {rawEmployee?.phone ? (
+                <a href={`tel:${rawEmployee.phone}`}>
+                  {formatPhone(rawEmployee.phone)}
+                </a>
+              ) : (
+                <MissingData>No phone provided</MissingData>
+              )}
+            </>
           )}
         </EmployeeSubtitle>
       </EmployeeInfo>

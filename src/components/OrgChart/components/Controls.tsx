@@ -58,7 +58,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
       isExpanded={sortBy === 'date'}
       title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
     >
-      {sortBy === 'date' ? 'Sort By Date' : 'Sort By Name'}
+      {sortBy === 'date' ? 'Sorted By Date' : 'Sorted By Name'}
     </ToggleButton>
     
     <ResetButton 

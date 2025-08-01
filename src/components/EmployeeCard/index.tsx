@@ -77,7 +77,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       </TierHeader>
       
       {/* Card Content */}
-      <CardHeader employee={employee} rawEmployee={rawEmployee} />
+      <CardHeader employee={employee} rawEmployee={rawEmployee} guestMode={guestMode} />
       {guestMode ? (
         <GuestCardBody employee={employee} />
       ) : (

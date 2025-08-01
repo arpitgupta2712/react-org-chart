@@ -12,9 +12,7 @@ interface GuestCardBodyProps {
 export const GuestCardBody: React.FC<GuestCardBodyProps> = ({ employee }) => {
   return (
     <StyledCardBody>
-      <EmployeeTitle>
-        {employee.position}
-      </EmployeeTitle>
+      {/* Minimal body for guest mode - could be empty or show tier info */}
     </StyledCardBody>
   )
 }
