@@ -29,7 +29,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Play,
-  Pause
+  Pause,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 
 // Re-export with consistent naming for backwards compatibility
@@ -56,6 +58,8 @@ export const PreviousIcon = ChevronLeft
 export const NextIcon = ChevronRight
 export const AutoIcon = Play
 export const ManualIcon = Pause
+export const EyeIcon = Eye
+export const EyeOffIcon = EyeOff
 
 // Additional icons for rotating employee data sets  
 export const PersonIcon = UserCircle

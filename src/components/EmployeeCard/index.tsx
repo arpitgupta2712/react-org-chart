@@ -4,6 +4,7 @@ import { RawEmployee } from '../../services/dataLoader'
 import { CardHeader } from './CardHeader'
 import { CardBody } from './CardBody'
 import { StyledEmployeeCard, TierHeader, CompanyFooter } from './styles/CardStyles'
+import { GuestCardBody } from './GuestCardBody'
 
 interface EmployeeCardProps {
   employee: Employee
@@ -22,6 +23,7 @@ interface EmployeeCardProps {
   isHighlighted?: boolean
   isDimmed?: boolean
   currentDataSetIndex?: number
+  guestMode?: boolean
 }
 
 const EmployeeCard: React.FC<EmployeeCardProps> = ({
@@ -33,7 +35,8 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   isSelected = false,
   isHighlighted = false,
   isDimmed = false,
-  currentDataSetIndex
+  currentDataSetIndex,
+  guestMode = false
 }) => {
   
   const {
@@ -75,13 +78,17 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       
       {/* Card Content */}
       <CardHeader employee={employee} rawEmployee={rawEmployee} />
-      <CardBody 
-        employee={employee} 
-        rawEmployee={rawEmployee} 
-        managerName={managerName}
-        showManager={showManager}
-        currentDataSetIndex={currentDataSetIndex}
-      />
+      {guestMode ? (
+        <GuestCardBody employee={employee} />
+      ) : (
+        <CardBody 
+          employee={employee} 
+          rawEmployee={rawEmployee} 
+          managerName={managerName}
+          showManager={showManager}
+          currentDataSetIndex={currentDataSetIndex}
+        />
+      )}
       
       {/* 🏢 Company Footer - dedicated space at bottom of card */}
       <CompanyFooter tier={employee.tier}>

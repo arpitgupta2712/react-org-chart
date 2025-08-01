@@ -19,6 +19,7 @@ interface EmployeeGridComponentProps {
   tierFilter: number | ''
   onResetFilters: () => void
   currentDataSetIndex?: number
+  guestMode?: boolean
 }
 
 export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
@@ -34,7 +35,8 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   designationFilter,
   tierFilter,
   onResetFilters,
-  currentDataSetIndex
+  currentDataSetIndex,
+  guestMode = false
 }) => {
   if (employees.length === 0) {
     return (
@@ -76,6 +78,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
             isHighlighted={highlightedEmployeeId === employee.id || isDirectSubordinate}
             isDimmed={isDimmedByFilters || isDimmedBySubordinateView}
             currentDataSetIndex={currentDataSetIndex}
+            guestMode={guestMode}
           />
         )
       })}

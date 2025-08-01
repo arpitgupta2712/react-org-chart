@@ -13,6 +13,7 @@ interface TierViewProps {
   selectedEmployeeId?: string
   highlightedEmployeeId?: string
   currentDataSetIndex?: number
+  guestMode?: boolean
 }
 
 export const TierView: React.FC<TierViewProps> = ({
@@ -22,7 +23,8 @@ export const TierView: React.FC<TierViewProps> = ({
   onCardClick,
   selectedEmployeeId,
   highlightedEmployeeId,
-  currentDataSetIndex
+  currentDataSetIndex,
+  guestMode = false
 }) => {
   const [currentEmployeeId, setCurrentEmployeeId] = useState<string>('')
   const [tierPath, setTierPath] = useState<Employee[]>([])
@@ -185,18 +187,34 @@ export const TierView: React.FC<TierViewProps> = ({
   const siblings = currentEmployee ? getSiblings(currentEmployee) : []
   const currentSiblingIndex = siblings.findIndex(emp => emp.id === currentEmployeeId)
   const hasParent = currentEmployee?.parentId !== undefined
-  const hasChildren = (currentEmployee?.children.length ?? 0) > 0
 
   if (!currentEmployee) return null
 
-  // Get only 2 tiers to display - current employee + ONLY their direct subordinate
-  // Show subordinate below focused employee. If no subordinate, show nothing.
+  // Build hierarchy path from root to current employee for breadcrumb
+  const buildHierarchyPath = (employee: Employee): Employee[] => {
+    const path: Employee[] = []
+    let current: Employee | undefined = employee
+    
+    // Build path from current up to root
+    while (current) {
+      path.unshift(current) // Add to beginning of array
+      current = current.parentId ? employees.find(emp => emp.id === current!.parentId) : undefined
+    }
+    
+    return path
+  }
+
+  const hierarchyPath = buildHierarchyPath(currentEmployee)
+  const currentPositionInPath = hierarchyPath.length - 1
+  
+  // Get only 1 subordinate to display - show current employee + ONE direct report at a time
+  const hasChildren = (currentEmployee?.children.length ?? 0) > 0
   const secondaryEmployee = hasChildren ? currentEmployee.children[0] : null
   const secondaryLabel = hasChildren ? 'Managing' : null
 
   return (
     <TierViewContainer
-      className={secondaryEmployee ? '' : 'single-tier'}
+      className={secondaryEmployee ? 'two-tier' : 'single-tier'}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -208,37 +226,67 @@ export const TierView: React.FC<TierViewProps> = ({
         </div>
       </ViewInfo>
 
-      {/* Current Employee - Always First (Top 50%) */}
+      {/* Hierarchy Breadcrumb Trail - Show path from root to current */}
+      {hierarchyPath.length > 1 && (
+        <div className="hierarchy-breadcrumb">
+          <div className="breadcrumb-label">Path:</div>
+          <div className="breadcrumb-trail">
+            {hierarchyPath.map((pathEmployee, index) => (
+              <div key={pathEmployee.id} className="breadcrumb-item">
+                <div 
+                  className={`breadcrumb-card ${index === currentPositionInPath ? 'current' : 'ancestor'}`}
+                  data-tier={pathEmployee.tier}
+                  onClick={() => setCurrentEmployeeId(pathEmployee.id)}
+                >
+                  <div className="breadcrumb-name">{pathEmployee.name}</div>
+                  <div className="breadcrumb-position">{pathEmployee.position}</div>
+                </div>
+                {index < hierarchyPath.length - 1 && (
+                  <div className="breadcrumb-arrow">→</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Current Employee - Always at Top */}
       <TierRow className="primary-tier">
         <TierLabel>Selected</TierLabel>
-        <EmployeeCard
-          employee={currentEmployee}
-          rawEmployee={getRawEmployee(currentEmployee.id)}
-          managerName={currentEmployee.parentId ? getManagerName(currentEmployee.parentId) : undefined}
-          onCardClick={onCardClick}
-          isSelected={selectedEmployeeId === currentEmployee.id}
-          isHighlighted={highlightedEmployeeId === currentEmployee.id || currentEmployee.id === currentEmployeeId}
-          currentDataSetIndex={currentDataSetIndex}
-        />
+        <div className="card-wrapper">
+          <EmployeeCard
+            employee={currentEmployee}
+            rawEmployee={getRawEmployee(currentEmployee.id)}
+            managerName={currentEmployee.parentId ? getManagerName(currentEmployee.parentId) : undefined}
+            onCardClick={onCardClick}
+            isSelected={selectedEmployeeId === currentEmployee.id}
+            isHighlighted={highlightedEmployeeId === currentEmployee.id || currentEmployee.id === currentEmployeeId}
+            currentDataSetIndex={currentDataSetIndex}
+            guestMode={guestMode}
+          />
+        </div>
       </TierRow>
 
       {/* Connection Line - Only show when there's a secondary employee */}
       {secondaryEmployee && <ConnectionLine />}
 
-      {/* Secondary Employee - Direct Report (Bottom) */}
+      {/* Secondary Employee - Direct Report (ONE card only) */}
       {secondaryEmployee && secondaryLabel && (
         <TierRow className="secondary-tier">
           <TierLabel>{secondaryLabel}</TierLabel>
-          <EmployeeCard
-            employee={secondaryEmployee}
-            rawEmployee={getRawEmployee(secondaryEmployee.id)}
-            managerName={secondaryEmployee.parentId ? getManagerName(secondaryEmployee.parentId) : undefined}
-            onCardClick={onCardClick}
-            isSelected={selectedEmployeeId === secondaryEmployee.id}
-            isHighlighted={highlightedEmployeeId === secondaryEmployee.id}
-            currentDataSetIndex={currentDataSetIndex}
-            config={{ compact: true }}
-          />
+          <div className="card-wrapper">
+            <EmployeeCard
+              employee={secondaryEmployee}
+              rawEmployee={getRawEmployee(secondaryEmployee.id)}
+              managerName={secondaryEmployee.parentId ? getManagerName(secondaryEmployee.parentId) : undefined}
+              onCardClick={onCardClick}
+              isSelected={selectedEmployeeId === secondaryEmployee.id}
+              isHighlighted={highlightedEmployeeId === secondaryEmployee.id}
+              currentDataSetIndex={currentDataSetIndex}
+              config={{ compact: true }}
+              guestMode={guestMode}
+            />
+          </div>
         </TierRow>
       )}
 

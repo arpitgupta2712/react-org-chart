@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { colors, design } from '../../../constants/colors'
+import { getTierColors } from '../../../constants/colors'
 
 export const TierViewContainer = styled.div`
   font-family: ${design.typography.fontFamily};
@@ -11,25 +12,140 @@ export const TierViewContainer = styled.div`
   padding: 0.75rem;
   padding-bottom: 5rem; /* Space for fixed bottom navigation */
   gap: 0.5rem;
+  
+
 
   /* Touch feedback for better mobile experience */
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
 
-  /* Two-tier layout: Equal height cards with space for connection line */
+  /* Hierarchy Breadcrumb Styling */
+  .hierarchy-breadcrumb {
+    flex: 0 0 auto;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: ${colors.appBackground};
+    border-radius: 0.5rem;
+    border: 1px solid ${colors.borderLight};
+    box-shadow: ${design.shadows.sm};
+  }
+
+  .breadcrumb-label {
+    font-size: 0.75rem;
+    font-weight: ${design.typography.weightMedium};
+    color: ${colors.textSecondary};
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .breadcrumb-trail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.25rem 0;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .breadcrumb-card {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    min-width: 150px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: ${design.shadows.md};
+    position: relative;
+
+    /* Apply tier-based colors dynamically */
+    ${props => {
+      // Generate styles for each tier
+      let tierStyles = '';
+      for (let tier = 1; tier <= 8; tier++) {
+        const tierColors = getTierColors(tier);
+        tierStyles += `
+          &[data-tier="${tier}"] {
+            background: ${tierColors.background};
+            border: 2px solid ${tierColors.border};
+            color: ${tierColors.text};
+          }
+        `;
+      }
+      return tierStyles;
+    }}
+
+    &.current {
+      box-shadow: 0 0 0 3px rgba(127, 163, 184, 0.3), ${design.shadows.lg};
+      transform: translateY(-2px);
+    }
+
+    &.ancestor {
+      opacity: 0.85;
+      
+      &:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+        box-shadow: ${design.shadows.lg};
+      }
+    }
+  }
+
+  .breadcrumb-name {
+    font-weight: ${design.typography.weightBold};
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    color: inherit; /* Use tier text color */
+  }
+
+  .breadcrumb-position {
+    font-size: 0.875rem;
+    line-height: 1.2;
+    opacity: 0.9;
+    color: inherit; /* Use tier text color */
+  }
+
+  .breadcrumb-arrow {
+    font-size: 1rem;
+    color: ${colors.textSecondary};
+    font-weight: bold;
+  }
+
+  /* Two-tier layout: Primary + Secondary cards only (1 card per row) */
   .primary-tier {
-    height: 42%; /* Slightly reduced to make room for connection line */
+    flex: 0 0 auto; /* Size based on content */
     margin-bottom: 0.5rem;
   }
 
   .secondary-tier {
-    height: 42%; /* Slightly reduced to make room for connection line */
+    flex: 0 0 auto; /* Size based on content */
     margin-top: 0.5rem;
   }
 
-  /* When only primary tier is shown, keep consistent height */
+  /* Card wrappers ensure proper sizing */
+  .card-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* When only primary tier is shown */
   &.single-tier .primary-tier {
-    height: 42%; /* Keep same height as when there are two cards */
+    flex: 0 0 auto; /* Don't stretch, natural size */
+  }
+
+  /* When both tiers are shown */
+  &.two-tier {
+    .primary-tier,
+    .secondary-tier {
+      flex: 0 0 auto; /* Both cards size naturally */
+    }
   }
 
   @media (max-width: 768px) {
@@ -38,18 +154,38 @@ export const TierViewContainer = styled.div`
     gap: 0.375rem;
 
     .primary-tier {
-      height: 41%; /* Equal height for mobile with connection space */
       margin-bottom: 0.375rem;
     }
 
     .secondary-tier {
-      height: 41%; /* Equal height for mobile with connection space */
       margin-top: 0.375rem;
     }
 
-    /* When only primary tier is shown on mobile */
-    &.single-tier .primary-tier {
-      height: 41%; /* Keep same height as when there are two cards */
+    /* Mobile breadcrumb adjustments */
+    .hierarchy-breadcrumb {
+      margin: 0.375rem 0;
+      padding: 0.5rem;
+    }
+
+    .breadcrumb-label {
+      font-size: 0.6875rem;
+    }
+
+    .breadcrumb-card {
+      padding: 0.625rem;
+      min-width: 130px;
+    }
+
+    .breadcrumb-name {
+      font-size: 1rem;
+    }
+
+    .breadcrumb-position {
+      font-size: 0.75rem;
+    }
+
+    .breadcrumb-arrow {
+      font-size: 1rem;
     }
   }
 `
@@ -117,16 +253,17 @@ export const ViewInfo = styled.div`
 
 export const TierRow = styled.div`
   display: flex;
-  align-items: stretch;
+  align-items: flex-start; /* Don't stretch, align to top */
   gap: 0.75rem;
   width: 100%;
   padding: 0.5rem;
 
-  /* Employee card should take remaining space and full height */
-  > div:not(:first-child) {
+  /* Card wrapper takes remaining space */
+  .card-wrapper {
     flex: 1;
-    height: 100%;
     min-height: 0; /* Allow shrinking */
+    display: flex;
+    flex-direction: column;
   }
 
   @media (max-width: 768px) {
@@ -145,7 +282,8 @@ export const TierLabel = styled.div`
   padding: 1rem 0.5rem;
   border-radius: 0.5rem;
   width: 2.5rem; /* Fixed width instead of min-width */
-  height: 100%; /* Take full height of the tier row */
+  min-height: 120px; /* Minimum height instead of 100% */
+  max-height: 200px; /* Maximum height to prevent excessive stretching */
   display: flex;
   align-items: center;
   justify-content: center;

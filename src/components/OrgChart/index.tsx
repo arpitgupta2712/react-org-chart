@@ -20,6 +20,9 @@ const OrgChart: React.FC = () => {
     isNarrowScreen ? 'tier' : 'grid'
   )
 
+  // Guest mode state - hide sensitive employee data
+  const [guestMode, setGuestMode] = useState<boolean>(false)
+
   // Data management
   const {
     employees,
@@ -155,6 +158,8 @@ const OrgChart: React.FC = () => {
         currentView={viewMode}
         onViewChange={handleViewChange}
         isNarrowScreen={isNarrowScreen}
+        guestMode={guestMode}
+        onGuestModeToggle={() => setGuestMode(!guestMode)}
       />
 
       {/* Conditional view rendering */}
@@ -167,6 +172,7 @@ const OrgChart: React.FC = () => {
           selectedEmployeeId={selectedEmployeeId || undefined}
           highlightedEmployeeId={highlightedEmployeeId || undefined}
           currentDataSetIndex={isManualMode ? currentDataSetIndex : undefined}
+          guestMode={guestMode}
         />
       ) : (
         <EmployeeGridComponent
@@ -183,6 +189,7 @@ const OrgChart: React.FC = () => {
           tierFilter={tierFilter}
           onResetFilters={resetFilters}
           currentDataSetIndex={isManualMode ? currentDataSetIndex : undefined}
+          guestMode={guestMode}
         />
       )}
     </Container>

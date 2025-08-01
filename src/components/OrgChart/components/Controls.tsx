@@ -20,7 +20,9 @@ import {
   PreviousIcon,
   NextIcon,
   AutoIcon,
-  ManualIcon
+  ManualIcon,
+  EyeIcon,
+  EyeOffIcon
 } from '../../icons'
 import { ViewToggle, ViewMode } from './ViewToggle'
 
@@ -149,6 +151,9 @@ interface ControlsProps {
   currentView: ViewMode
   onViewChange: (view: ViewMode) => void
   isNarrowScreen: boolean
+  // Guest mode props
+  guestMode: boolean
+  onGuestModeToggle: () => void
 }
 
 export const Controls: React.FC<ControlsProps> = ({
@@ -172,7 +177,9 @@ export const Controls: React.FC<ControlsProps> = ({
   onToggleMode,
   currentView,
   onViewChange,
-  isNarrowScreen
+  isNarrowScreen,
+  guestMode,
+  onGuestModeToggle
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   
@@ -199,6 +206,17 @@ export const Controls: React.FC<ControlsProps> = ({
             disabled={false}
           />
         )}
+        
+        {/* Guest Mode Toggle */}
+        <ControlGroup>
+          <ToggleButton
+            onClick={onGuestModeToggle}
+            isExpanded={guestMode}
+            title={guestMode ? 'Switch to Full View (show all data)' : 'Switch to Guest View (hide sensitive data)'}
+          >
+            {guestMode ? <EyeOffIcon /> : <EyeIcon />}
+          </ToggleButton>
+        </ControlGroup>
         
         {/* Filter/Sort Controls */}
         <FilterControls
