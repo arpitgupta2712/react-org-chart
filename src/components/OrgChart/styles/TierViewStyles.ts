@@ -27,9 +27,9 @@ export const TierViewContainer = styled.div`
     margin-top: 0.5rem;
   }
 
-  /* When only primary tier is shown, give it more space */
+  /* When only primary tier is shown, keep consistent height */
   &.single-tier .primary-tier {
-    height: 80%; /* More space when no secondary card */
+    height: 42%; /* Keep same height as when there are two cards */
   }
 
   @media (max-width: 768px) {
@@ -38,18 +38,18 @@ export const TierViewContainer = styled.div`
     gap: 0.375rem;
 
     .primary-tier {
-      height: 40%; /* Equal height for mobile with connection space */
+      height: 41%; /* Equal height for mobile with connection space */
       margin-bottom: 0.375rem;
     }
 
     .secondary-tier {
-      height: 40%; /* Equal height for mobile with connection space */
+      height: 41%; /* Equal height for mobile with connection space */
       margin-top: 0.375rem;
     }
 
     /* When only primary tier is shown on mobile */
     &.single-tier .primary-tier {
-      height: 75%;
+      height: 41%; /* Keep same height as when there are two cards */
     }
   }
 `

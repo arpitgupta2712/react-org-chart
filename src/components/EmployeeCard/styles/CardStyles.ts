@@ -170,7 +170,7 @@ export const CompanyFooter = styled.div<{ tier: number }>`
   padding: 0.75rem 1.5rem;
   margin: 1.5rem -2rem -2rem -2rem; /* Negative margins to extend to card edges */
   border-radius: 0 0 ${sizes.cardBorderRadius} ${sizes.cardBorderRadius};
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;

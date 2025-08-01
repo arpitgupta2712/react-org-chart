@@ -190,13 +190,15 @@ export const Controls: React.FC<ControlsProps> = ({
     <StyledControls isExpanded={isExpanded}>
       {/* Header Bar with Left/Right Layout */}
       <ControlsHeader>
-        {/* View Toggle - prominently placed first */}
-        <ViewToggle
-          currentView={currentView}
-          onViewChange={onViewChange}
-          isNarrowScreen={isNarrowScreen}
-          disabled={false}
-        />
+        {/* View Toggle - only show on larger screens where both views are practical */}
+        {!isNarrowScreen && (
+          <ViewToggle
+            currentView={currentView}
+            onViewChange={onViewChange}
+            isNarrowScreen={isNarrowScreen}
+            disabled={false}
+          />
+        )}
         
         {/* Filter/Sort Controls */}
         <FilterControls

@@ -9,17 +9,11 @@ export const ViewToggleContainer = styled.div`
   border-radius: 1rem;
   box-shadow: ${design.shadows.sm};
   backdrop-filter: blur(10px);
+  width: fit-content; /* Only take the space needed */
 
   @media (max-width: 768px) {
     padding: 0.375rem;
     gap: 0.375rem;
-  }
-
-  /* Extra compact for narrow screens (tier view) */
-  @media (max-width: 768px) and (orientation: portrait) {
-    padding: 0.25rem;
-    gap: 0.25rem;
-    border-radius: 0.75rem;
   }
 `
 

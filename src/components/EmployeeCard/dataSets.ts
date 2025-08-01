@@ -1,6 +1,7 @@
 import React from 'react'
 import { Employee } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
+import { RelativeTime } from '../common/RelativeTime'
 import { 
   EmailIcon,
   CalendarIcon,
@@ -62,6 +63,11 @@ export const formatDate = (dateString: string | null | undefined): React.ReactNo
   }
 }
 
+export const formatRelativeDate = (dateString: string | null | undefined): React.ReactNode => {
+  if (!dateString) return React.createElement('span', { className: 'no-data' }, 'Not provided')
+  return React.createElement(RelativeTime, { dateString, showTooltip: true })
+}
+
 // Missing data component placeholder
 export const MissingData: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   React.createElement('span', { className: 'no-data' }, children)
@@ -88,7 +94,7 @@ export const createEmployeeDataSets = (showManager: boolean): DataSet[] => [
       {
         icon: CalendarIcon,
         label: 'Joined:',
-        value: (emp, raw) => formatDate(raw?.date_of_joining)
+        value: (emp, raw) => formatRelativeDate(raw?.date_of_joining)
       },
       {
         icon: showManager ? UserIcon : ShieldIcon,
