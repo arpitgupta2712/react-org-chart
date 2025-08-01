@@ -1,6 +1,5 @@
 import React from 'react'
 import { Employee } from '../../types'
-import { getHierarchyLabel } from '../../types'
 import {
   CardBody as StyledCardBody,
   EmployeeTitle
@@ -14,7 +13,7 @@ export const GuestCardBody: React.FC<GuestCardBodyProps> = ({ employee }) => {
   return (
     <StyledCardBody>
       <EmployeeTitle>
-        {employee.position} • {getHierarchyLabel(employee.tier)}
+        {employee.position}
       </EmployeeTitle>
     </StyledCardBody>
   )
