@@ -18,23 +18,26 @@ export const ControlsHeader = styled.div`
   align-items: center;
   padding: ${sizes.spaceMD} 0;
   width: 100%;
+  gap: 1rem;
+  
+  /* Ensure control groups wrap properly */
+  flex-wrap: wrap;
   
   @media (max-width: 768px) {
-    flex-direction: column;
-    gap: ${sizes.spaceMD};
     justify-content: center;
+    gap: 0.75rem;
   }
 
-  /* Extra compact for narrow screens (tier view) */
-  @media (max-width: 768px) and (orientation: portrait) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
+  /* Narrow screens - single column, centered */
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.75rem 0;
     
+    /* Each control group takes full width and centers content */
     > * {
-      flex: 1;
-      min-width: fit-content;
+      width: 100%;
+      justify-content: center;
     }
   }
 `

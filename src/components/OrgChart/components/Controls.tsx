@@ -195,50 +195,85 @@ export const Controls: React.FC<ControlsProps> = ({
 
   return (
     <StyledControls isExpanded={isExpanded}>
-      {/* Header Bar with Left/Right Layout */}
       <ControlsHeader>
-        {/* View Toggle - only show on larger screens where both views are practical */}
-        {!isNarrowScreen && (
-          <ViewToggle
-            currentView={currentView}
-            onViewChange={onViewChange}
-            isNarrowScreen={isNarrowScreen}
-            disabled={false}
-          />
-        )}
-        
-        {/* Guest Mode Toggle */}
+        {/* Primary Actions Group - Always visible, high priority */}
         <ControlGroup>
+          {/* Guest Mode Toggle */}
           <ToggleButton
             onClick={onGuestModeToggle}
             isExpanded={guestMode}
-            title={guestMode ? 'Switch to Full View (show all data)' : 'Switch to Guest View (hide sensitive data)'}
+            title={guestMode ? 'Show detailed view with sensitive data' : 'Hide sensitive details (guest mode)'}
           >
             {guestMode ? <EyeOffIcon /> : <EyeIcon />}
           </ToggleButton>
+          
+          {/* Filter Toggle */}
+          <ToggleButton 
+            onClick={() => setIsExpanded(!isExpanded)}
+            isExpanded={isExpanded}
+            title={isExpanded ? 'Hide Filters' : 'Show Filters'}
+          >
+            <SettingsIcon />
+          </ToggleButton>
+          
+          {/* Sort Toggle */}
+          <ToggleButton
+            onClick={() => onSortChange(sortBy === 'date' ? 'name' : 'date')}
+            isExpanded={sortBy === 'date'}
+            title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
+          >
+            <SortIcon />
+          </ToggleButton>
         </ControlGroup>
-        
-        {/* Filter/Sort Controls */}
-        <FilterControls
-          isExpanded={isExpanded}
-          onToggleExpanded={() => setIsExpanded(!isExpanded)}
-          sortBy={sortBy}
-          onSortChange={onSortChange}
-          onReset={onReset}
-          activeFiltersCount={activeFilters.length}
-        />
-        
-        {/* Only show data set navigation in grid view */}
-        {currentView === 'grid' && (
-          <DataSetNavigation
-            currentDataSetIndex={currentDataSetIndex}
-            isManualMode={isManualMode}
-            onToggleMode={onToggleMode}
-            onPreviousDataSet={onPreviousDataSet}
-            onNextDataSet={onNextDataSet}
-            dataSetNames={dataSetNames}
-          />
-        )}
+
+        {/* Secondary Actions Group - View dependent */}
+        <ControlGroup>
+          {/* View Toggle - only on larger screens */}
+          {!isNarrowScreen && (
+            <ViewToggle
+              currentView={currentView}
+              onViewChange={onViewChange}
+              isNarrowScreen={isNarrowScreen}
+              disabled={false}
+            />
+          )}
+          
+          {/* Data Set Navigation - available in both views */}
+          <ToggleButton
+            onClick={onToggleMode}
+            isExpanded={isManualMode}
+            title={isManualMode ? 'Switch to Auto Mode (5s rotation)' : 'Switch to Manual Mode'}
+          >
+            {isManualMode ? <ManualIcon /> : <AutoIcon />}
+          </ToggleButton>
+          
+          <ToggleButton
+            onClick={onPreviousDataSet}
+            isExpanded={false}
+            title="Previous Data Set"
+            disabled={!isManualMode}
+          >
+            <PreviousIcon />
+          </ToggleButton>
+          
+          <ToggleButton
+            onClick={onNextDataSet}
+            isExpanded={false}
+            title="Next Data Set"
+            disabled={!isManualMode}
+          >
+            <NextIcon />
+          </ToggleButton>
+          
+          {/* Reset - Always available but lower priority */}
+          <ResetButton 
+            onClick={onReset} 
+            title="Reset All Filters"
+            disabled={activeFilters.length === 0}
+          >
+            <ResetIcon />
+          </ResetButton>
+        </ControlGroup>
       </ControlsHeader>
 
       {/* Expandable Content */}

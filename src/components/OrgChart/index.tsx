@@ -21,7 +21,7 @@ const OrgChart: React.FC = () => {
   )
 
   // Guest mode state - hide sensitive employee data
-  const [guestMode, setGuestMode] = useState<boolean>(false)
+  const [guestMode, setGuestMode] = useState<boolean>(true)
 
   // Data management
   const {
