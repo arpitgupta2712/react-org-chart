@@ -126,9 +126,32 @@ export const TierViewContainer = styled.div`
   }
 
   .breadcrumb-arrow {
-    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0.25rem 0;
+    flex-shrink: 0;
+    gap: 0.125rem;
+  }
+
+  .arrow-symbol {
+    font-size: 1.2rem;
     color: ${colors.textSecondary};
     font-weight: bold;
+    line-height: 1;
+  }
+
+  .dependent-count {
+    font-size: 0.6875rem;
+    color: ${colors.textSecondary};
+    font-weight: ${design.typography.weightMedium};
+    opacity: 0.8;
+    background: ${colors.pageBackground};
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+    border: 1px solid ${colors.borderLight};
   }
 
   /* Two-tier layout: Primary + Secondary cards only (1 card per row) */
@@ -239,8 +262,17 @@ export const TierViewContainer = styled.div`
     }
 
     .breadcrumb-arrow {
-      font-size: 1rem;
       margin: 0.125rem 0;
+      gap: 0.1rem;
+    }
+
+    .arrow-symbol {
+      font-size: 1rem;
+    }
+
+    .dependent-count {
+      font-size: 0.625rem;
+      padding: 0.1rem 0.2rem;
     }
 
     .main-content {
@@ -447,7 +479,7 @@ export const NavButton = styled.button<{ disabled?: boolean }>`
 
 export const ConnectionLine = styled.div`
   position: relative;
-  height: 8rem;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -489,7 +521,7 @@ export const ConnectionLine = styled.div`
   }
 
   @media (max-width: 768px) {
-    height: 5rem;
+    height: 3rem;
     margin: 0.25rem 0;
 
     &::before {
@@ -501,6 +533,28 @@ export const ConnectionLine = styled.div`
       height: 10px;
       border: 2px solid white;
     }
+
+    .connection-count {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.4rem;
+    }
+  }
+
+  .connection-count {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: ${colors.cardBackground};
+    color: ${colors.textSecondary};
+    font-size: 1rem;
+    font-weight: ${design.typography.weightMedium};
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    border: 1px solid ${colors.borderLight};
+    box-shadow: ${design.shadows.sm};
+    white-space: nowrap;
+    z-index: 3;
   }
 `
 

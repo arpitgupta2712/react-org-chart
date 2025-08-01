@@ -224,16 +224,29 @@ export const TierView: React.FC<TierViewProps> = ({
         <div className="breadcrumb-trail">
           {hierarchyPath.map((pathEmployee, index) => (
             <div key={pathEmployee.id} className="breadcrumb-item">
-              <div 
-                className={`breadcrumb-card ${index === currentPositionInPath ? 'current' : 'ancestor'}`}
-                data-tier={pathEmployee.tier}
-                onClick={() => setCurrentEmployeeId(pathEmployee.id)}
-              >
-                <div className="breadcrumb-name">{pathEmployee.name}</div>
-                <div className="breadcrumb-position">{pathEmployee.position}</div>
-              </div>
+                              <div 
+                  className={`breadcrumb-card ${index === currentPositionInPath ? 'current' : 'ancestor'}`}
+                  data-tier={pathEmployee.tier}
+                  onClick={() => setCurrentEmployeeId(pathEmployee.id)}
+                >
+                  <div className="breadcrumb-name">
+                    {getRawEmployee(pathEmployee.id)?.nickname || pathEmployee.name}
+                  </div>
+                  <div className="breadcrumb-position">{pathEmployee.position}</div>
+                </div>
               {index < hierarchyPath.length - 1 && (
-                <div className="breadcrumb-arrow">↓</div>
+                <div className="breadcrumb-arrow">
+                  <span className="arrow-symbol">↓</span>
+                  <span className="dependent-count">
+                    {(() => {
+                      const currentEmployee = pathEmployee;
+                      const nextEmployee = hierarchyPath[index + 1];
+                      const children = currentEmployee.children;
+                      const currentChildIndex = children.findIndex(child => child.id === nextEmployee.id);
+                      return `${currentChildIndex + 1} / ${children.length}`;
+                    })()}
+                  </span>
+                </div>
               )}
             </div>
           ))}
@@ -269,7 +282,13 @@ export const TierView: React.FC<TierViewProps> = ({
       </TierRow>
 
       {/* Connection Line - Only show when there's a secondary employee */}
-      {secondaryEmployee && <ConnectionLine />}
+      {secondaryEmployee && (
+        <ConnectionLine>
+          <div className="connection-count">
+            {currentEmployee.children.length} employees
+          </div>
+        </ConnectionLine>
+      )}
 
       {/* Secondary Employee - Direct Report (ONE card only) */}
       {secondaryEmployee && secondaryLabel && (
