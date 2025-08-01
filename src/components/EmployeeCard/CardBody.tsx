@@ -30,6 +30,7 @@ interface CardBodyProps {
   rawEmployee?: RawEmployee
   managerName?: string
   showManager?: boolean
+  currentDataSetIndex?: number
 }
 
 
@@ -79,22 +80,27 @@ export const CardBody: React.FC<CardBodyProps> = ({
   employee, 
   rawEmployee, 
   managerName, 
-  showManager = true 
+  showManager = true,
+  currentDataSetIndex: externalDataSetIndex
 }) => {
-  const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0)
+  const [internalDataSetIndex, setInternalDataSetIndex] = useState(0)
 
   // Get data sets from dedicated file
   const dataSets = createEmployeeDataSets(showManager)
 
-  // Auto-rotation effect
+  // Auto-rotation effect - only runs if no external control is provided
   useEffect(() => {
+    if (externalDataSetIndex !== undefined) return // Don't auto-rotate if externally controlled
+    
     const interval = setInterval(() => {
-      setCurrentDataSetIndex((prevIndex) => (prevIndex + 1) % dataSets.length)
+      setInternalDataSetIndex((prevIndex) => (prevIndex + 1) % dataSets.length)
     }, 5000) // Rotate every 5 seconds
 
     return () => clearInterval(interval)
-  }, [dataSets.length])
+  }, [dataSets.length, externalDataSetIndex])
 
+  // Use external index if provided, otherwise use internal index
+  const currentDataSetIndex = externalDataSetIndex !== undefined ? externalDataSetIndex : internalDataSetIndex
   const currentDataSet = dataSets[currentDataSetIndex]
 
   return (

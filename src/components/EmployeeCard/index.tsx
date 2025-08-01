@@ -21,6 +21,7 @@ interface EmployeeCardProps {
   isSelected?: boolean
   isHighlighted?: boolean
   isDimmed?: boolean
+  currentDataSetIndex?: number
 }
 
 const EmployeeCard: React.FC<EmployeeCardProps> = ({
@@ -31,7 +32,8 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   onCardClick,
   isSelected = false,
   isHighlighted = false,
-  isDimmed = false
+  isDimmed = false,
+  currentDataSetIndex
 }) => {
   
   const {
@@ -78,6 +80,7 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
         rawEmployee={rawEmployee} 
         managerName={managerName}
         showManager={showManager}
+        currentDataSetIndex={currentDataSetIndex}
       />
       
       {/* 🏢 Company Footer - dedicated space at bottom of card */}

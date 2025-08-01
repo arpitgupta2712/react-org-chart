@@ -18,6 +18,7 @@ interface EmployeeGridComponentProps {
   designationFilter: string
   tierFilter: number | ''
   onResetFilters: () => void
+  currentDataSetIndex?: number
 }
 
 export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
@@ -32,7 +33,8 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   searchQuery,
   designationFilter,
   tierFilter,
-  onResetFilters
+  onResetFilters,
+  currentDataSetIndex
 }) => {
   if (employees.length === 0) {
     return (
@@ -73,6 +75,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
             isSelected={selectedEmployeeId === employee.id}
             isHighlighted={highlightedEmployeeId === employee.id || isSubordinate}
             isDimmed={isDimmedByFilters || isDimmedBySubordinateView}
+            currentDataSetIndex={currentDataSetIndex}
           />
         )
       })}

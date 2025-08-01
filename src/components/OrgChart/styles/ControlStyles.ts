@@ -9,13 +9,15 @@ export const Controls = styled.div<{ isExpanded: boolean }>`
 
 export const ControlsHeader = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: ${sizes.spaceMD} 0;
+  width: 100%;
   
   @media (max-width: 768px) {
     flex-direction: column;
     gap: ${sizes.spaceMD};
+    justify-content: center;
   }
 `
 
@@ -80,6 +82,18 @@ export const ToggleButton = styled.button<{ isExpanded: boolean }>`
   
   &:active {
     transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      transform: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
   }
   
   /* Icon sizing for Lucide icons */

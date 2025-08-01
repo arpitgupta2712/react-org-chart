@@ -25,7 +25,11 @@ import {
   FileText,
   CheckCircle,
   IdCard,
-  ArrowUpDown
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause
 } from 'lucide-react'
 
 // Re-export with consistent naming for backwards compatibility
@@ -46,6 +50,12 @@ export const CollapseIcon = ChevronDown
 export const ResetIcon = RotateCcw
 export const FilterIcon = Filter
 export const SortIcon = ArrowUpDown
+
+// Navigation icons
+export const PreviousIcon = ChevronLeft
+export const NextIcon = ChevronRight
+export const AutoIcon = Play
+export const ManualIcon = Pause
 
 // Additional icons for rotating employee data sets  
 export const PersonIcon = UserCircle

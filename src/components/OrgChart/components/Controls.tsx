@@ -16,8 +16,114 @@ import {
   SettingsIcon, 
   ResetIcon,
   BuildingIcon,
-  SortIcon
+  SortIcon,
+  PreviousIcon,
+  NextIcon,
+  AutoIcon,
+  ManualIcon
 } from '../../icons'
+
+// Reusable component for filter/sort controls (left side)
+interface FilterControlsProps {
+  isExpanded: boolean
+  onToggleExpanded: () => void
+  sortBy: 'date' | 'name'
+  onSortChange: (sort: 'date' | 'name') => void
+  onReset: () => void
+  activeFiltersCount: number
+}
+
+const FilterControls: React.FC<FilterControlsProps> = ({
+  isExpanded,
+  onToggleExpanded,
+  sortBy,
+  onSortChange,
+  onReset,
+  activeFiltersCount
+}) => (
+  <ControlGroup>
+    <ToggleButton 
+      onClick={onToggleExpanded}
+      isExpanded={isExpanded}
+      title={isExpanded ? 'Hide Filters' : 'Show Filters'}
+    >
+      <SettingsIcon />
+    </ToggleButton>
+    
+    <ToggleButton
+      onClick={() => onSortChange(sortBy === 'date' ? 'name' : 'date')}
+      isExpanded={sortBy === 'date'}
+      title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
+    >
+      {sortBy === 'date' ? 'Sort By Date' : 'Sort By Name'}
+    </ToggleButton>
+    
+    <ResetButton 
+      onClick={onReset} 
+      title="Reset All Filters"
+      disabled={activeFiltersCount === 0}
+    >
+      <ResetIcon />
+    </ResetButton>
+  </ControlGroup>
+)
+
+// Reusable component for data set navigation (right side)
+interface DataSetNavigationProps {
+  currentDataSetIndex: number
+  isManualMode: boolean
+  onToggleMode: () => void
+  onPreviousDataSet: () => void
+  onNextDataSet: () => void
+  dataSetNames: string[]
+}
+
+const DataSetNavigation: React.FC<DataSetNavigationProps> = ({
+  currentDataSetIndex,
+  isManualMode,
+  onToggleMode,
+  onPreviousDataSet,
+  onNextDataSet,
+  dataSetNames
+}) => (
+  <ControlGroup>
+    <ToggleButton
+      onClick={onToggleMode}
+      isExpanded={isManualMode}
+      title={isManualMode ? 'Switch to Auto Mode (5s rotation)' : 'Switch to Manual Mode'}
+    >
+      {isManualMode ? <ManualIcon /> : <AutoIcon />}
+    </ToggleButton>
+    
+    <ToggleButton
+      onClick={onPreviousDataSet}
+      isExpanded={false}
+      title="Previous Data Set"
+      disabled={!isManualMode}
+    >
+      <PreviousIcon />
+    </ToggleButton>
+    
+    <span style={{ 
+      fontSize: '0.9rem', 
+      color: isManualMode ? '#333' : '#999', 
+      padding: '0 0.5rem',
+      minWidth: '140px',
+      textAlign: 'center'
+    }}>
+      {dataSetNames[currentDataSetIndex]} {!isManualMode && '(Auto)'}
+    </span>
+    
+    <ToggleButton
+      onClick={onNextDataSet}
+      isExpanded={false}
+      title="Next Data Set"
+      disabled={!isManualMode}
+    >
+      <NextIcon />
+    </ToggleButton>
+  </ControlGroup>
+)
 
 interface ControlsProps {
   searchQuery: string
@@ -32,6 +138,12 @@ interface ControlsProps {
   tiers: Array<{ tier: number; label: string; count: number }>
   employeeCounts: Record<string, number>
   onReset: () => void
+  currentDataSetIndex: number
+  onPreviousDataSet: () => void
+  onNextDataSet: () => void
+  dataSetCount: number
+  isManualMode: boolean
+  onToggleMode: () => void
 }
 
 export const Controls: React.FC<ControlsProps> = ({
@@ -46,9 +158,18 @@ export const Controls: React.FC<ControlsProps> = ({
   designations,
   tiers,
   employeeCounts,
-  onReset
+  onReset,
+  currentDataSetIndex,
+  onPreviousDataSet,
+  onNextDataSet,
+  dataSetCount,
+  isManualMode,
+  onToggleMode
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  
+  // Data set names
+  const dataSetNames = ['Basic Info', 'Personal Details', 'Emergency Details', 'Salary Details', 'Government IDs']
   
   // Calculate active filters
   const activeFilters = [
@@ -59,33 +180,27 @@ export const Controls: React.FC<ControlsProps> = ({
 
   return (
     <StyledControls isExpanded={isExpanded}>
-      {/* Simple Header Bar */}
+      {/* Header Bar with Left/Right Layout */}
       <ControlsHeader>
-        <ControlGroup>
-          <ToggleButton 
-            onClick={() => setIsExpanded(!isExpanded)}
-            isExpanded={isExpanded}
-            title={isExpanded ? 'Hide Filters' : 'Show Filters'}
-          >
-            <SettingsIcon />
-          </ToggleButton>
-          
-          <ToggleButton
-            onClick={() => onSortChange(sortBy === 'date' ? 'name' : 'date')}
-            isExpanded={sortBy === 'date'}
-            title={`Currently sorting by ${sortBy === 'date' ? 'joining date (newest first)' : 'name (A-Z)'}`}
-          >
-            {sortBy === 'date' ? 'Sort By Date' : 'Sort By Name'}
-          </ToggleButton>
-          
-          <ResetButton 
-            onClick={onReset} 
-            title="Reset All Filters"
-            disabled={activeFilters.length === 0}
-          >
-            <ResetIcon />
-          </ResetButton>
-        </ControlGroup>
+        {/* Left Side: Filter/Sort Controls */}
+        <FilterControls
+          isExpanded={isExpanded}
+          onToggleExpanded={() => setIsExpanded(!isExpanded)}
+          sortBy={sortBy}
+          onSortChange={onSortChange}
+          onReset={onReset}
+          activeFiltersCount={activeFilters.length}
+        />
+        
+        {/* Right Side: Data Set Navigation */}
+        <DataSetNavigation
+          currentDataSetIndex={currentDataSetIndex}
+          isManualMode={isManualMode}
+          onToggleMode={onToggleMode}
+          onPreviousDataSet={onPreviousDataSet}
+          onNextDataSet={onNextDataSet}
+          dataSetNames={dataSetNames}
+        />
       </ControlsHeader>
 
       {/* Expandable Content */}
