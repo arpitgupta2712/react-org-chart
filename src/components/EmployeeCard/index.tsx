@@ -91,11 +91,13 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       )}
       
       {/* 🏢 Company Footer - dedicated space at bottom of card */}
-      <CompanyFooter tier={employee.tier}>
-        <span>
-          {rawEmployee?.company_billed_to || 'No Company Assigned'}
-        </span>
-      </CompanyFooter>
+      {!guestMode && (
+        <CompanyFooter tier={employee.tier}>
+          <span>
+            {rawEmployee?.company_billed_to || 'No Company Assigned'}
+          </span>
+        </CompanyFooter>
+      )}
     </StyledEmployeeCard>
   )
 }
