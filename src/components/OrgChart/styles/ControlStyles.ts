@@ -5,6 +5,11 @@ export const Controls = styled.div<{ isExpanded: boolean }>`
   background: transparent;
   margin-bottom: ${sizes.spaceXL};
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Extra compact for narrow screens (tier view) */
+  @media (max-width: 768px) and (orientation: portrait) {
+    margin-bottom: 0.75rem;
+  }
 `
 
 export const ControlsHeader = styled.div`
@@ -18,6 +23,19 @@ export const ControlsHeader = styled.div`
     flex-direction: column;
     gap: ${sizes.spaceMD};
     justify-content: center;
+  }
+
+  /* Extra compact for narrow screens (tier view) */
+  @media (max-width: 768px) and (orientation: portrait) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    
+    > * {
+      flex: 1;
+      min-width: fit-content;
+    }
   }
 `
 

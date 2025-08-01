@@ -1,15 +1,25 @@
 import React, { useMemo, useState } from 'react'
 import { useEmployeeData } from '../../hooks/useEmployeeData'
 import { useEmployeeFiltering } from '../../hooks/useEmployeeFiltering'
-
 import { useEmployeeSelection } from '../../hooks/useEmployeeSelection'
+import { useScreenSize } from '../../hooks/useScreenSize'
 import { Controls } from './components/Controls'
 import { LoadingStateComponent } from './components/LoadingStateComponent'
 import { ErrorStateComponent } from './components/ErrorStateComponent'
 import { EmployeeGridComponent } from './components/EmployeeGridComponent'
+import { TierView } from './components/TierView'
+import { ViewMode } from './components/ViewToggle'
 import { Container } from './styles/LayoutStyles'
 
 const OrgChart: React.FC = () => {
+  // Screen size detection for responsive view switching
+  const { isNarrow: isNarrowScreen, isMobile } = useScreenSize()
+
+  // View mode state - defaults to tier view on narrow screens
+  const [viewMode, setViewMode] = useState<ViewMode>(() => 
+    isNarrowScreen ? 'tier' : 'grid'
+  )
+
   // Data management
   const {
     employees,
@@ -46,10 +56,17 @@ const OrgChart: React.FC = () => {
     getAllSubordinates
   } = useEmployeeSelection(employees)
 
-  // Data set navigation for employee cards
+  // Data set navigation for employee cards (only used in grid view)
   const [currentDataSetIndex, setCurrentDataSetIndex] = useState(0)
   const [isManualMode, setIsManualMode] = useState(false)
   const dataSetCount = 5 // We have 5 data sets: basic, personal, emergency, salary, government
+
+  // Auto-switch to tier view on narrow screens
+  React.useEffect(() => {
+    if (isNarrowScreen && viewMode === 'grid') {
+      setViewMode('tier')
+    }
+  }, [isNarrowScreen, viewMode])
 
   const handleNextDataSet = () => {
     setIsManualMode(true) // Switch to manual mode when navigation is used
@@ -82,6 +99,17 @@ const OrgChart: React.FC = () => {
     resetFilters()
     resetSelection()
     console.log('🔄 View reset')
+  }
+
+  // View change handler
+  const handleViewChange = (newView: ViewMode) => {
+    setViewMode(newView)
+    // Reset some states when switching views
+    if (newView === 'tier') {
+      // Reset data set navigation to auto mode for tier view
+      setIsManualMode(false)
+      setCurrentDataSetIndex(0)
+    }
   }
 
   // Render loading state
@@ -123,23 +151,39 @@ const OrgChart: React.FC = () => {
         dataSetCount={dataSetCount}
         isManualMode={isManualMode}
         onToggleMode={handleToggleMode}
+        currentView={viewMode}
+        onViewChange={handleViewChange}
+        isNarrowScreen={isNarrowScreen}
       />
 
-      <EmployeeGridComponent
-        employees={filteredEmployees}
-        getRawEmployee={getRawEmployee}
-        getManagerName={getManagerName}
-        onCardClick={handleCardClick}
-        selectedEmployeeId={selectedEmployeeId}
-        highlightedEmployeeId={highlightedEmployeeId}
-        showingSubordinatesForId={showingSubordinatesForId}
-        getAllSubordinates={getAllSubordinates}
-        searchQuery={searchQuery}
-        designationFilter={designationFilter}
-        tierFilter={tierFilter}
-        onResetFilters={resetFilters}
-        currentDataSetIndex={isManualMode ? currentDataSetIndex : undefined}
-      />
+      {/* Conditional view rendering */}
+      {viewMode === 'tier' ? (
+        <TierView
+          employees={filteredEmployees}
+          getRawEmployee={getRawEmployee}
+          getManagerName={getManagerName}
+          onCardClick={handleCardClick}
+          selectedEmployeeId={selectedEmployeeId || undefined}
+          highlightedEmployeeId={highlightedEmployeeId || undefined}
+          currentDataSetIndex={isManualMode ? currentDataSetIndex : undefined}
+        />
+      ) : (
+        <EmployeeGridComponent
+          employees={filteredEmployees}
+          getRawEmployee={getRawEmployee}
+          getManagerName={getManagerName}
+          onCardClick={handleCardClick}
+          selectedEmployeeId={selectedEmployeeId}
+          highlightedEmployeeId={highlightedEmployeeId}
+          showingSubordinatesForId={showingSubordinatesForId}
+          getAllSubordinates={getAllSubordinates}
+          searchQuery={searchQuery}
+          designationFilter={designationFilter}
+          tierFilter={tierFilter}
+          onResetFilters={resetFilters}
+          currentDataSetIndex={isManualMode ? currentDataSetIndex : undefined}
+        />
+      )}
     </Container>
   )
 }

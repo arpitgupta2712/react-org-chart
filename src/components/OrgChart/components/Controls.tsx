@@ -22,6 +22,7 @@ import {
   AutoIcon,
   ManualIcon
 } from '../../icons'
+import { ViewToggle, ViewMode } from './ViewToggle'
 
 // Reusable component for filter/sort controls (left side)
 interface FilterControlsProps {
@@ -144,6 +145,10 @@ interface ControlsProps {
   dataSetCount: number
   isManualMode: boolean
   onToggleMode: () => void
+  // View toggle props
+  currentView: ViewMode
+  onViewChange: (view: ViewMode) => void
+  isNarrowScreen: boolean
 }
 
 export const Controls: React.FC<ControlsProps> = ({
@@ -164,7 +169,10 @@ export const Controls: React.FC<ControlsProps> = ({
   onNextDataSet,
   dataSetCount,
   isManualMode,
-  onToggleMode
+  onToggleMode,
+  currentView,
+  onViewChange,
+  isNarrowScreen
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   
@@ -182,7 +190,15 @@ export const Controls: React.FC<ControlsProps> = ({
     <StyledControls isExpanded={isExpanded}>
       {/* Header Bar with Left/Right Layout */}
       <ControlsHeader>
-        {/* Left Side: Filter/Sort Controls */}
+        {/* View Toggle - prominently placed first */}
+        <ViewToggle
+          currentView={currentView}
+          onViewChange={onViewChange}
+          isNarrowScreen={isNarrowScreen}
+          disabled={false}
+        />
+        
+        {/* Filter/Sort Controls */}
         <FilterControls
           isExpanded={isExpanded}
           onToggleExpanded={() => setIsExpanded(!isExpanded)}
@@ -192,15 +208,17 @@ export const Controls: React.FC<ControlsProps> = ({
           activeFiltersCount={activeFilters.length}
         />
         
-        {/* Right Side: Data Set Navigation */}
-        <DataSetNavigation
-          currentDataSetIndex={currentDataSetIndex}
-          isManualMode={isManualMode}
-          onToggleMode={onToggleMode}
-          onPreviousDataSet={onPreviousDataSet}
-          onNextDataSet={onNextDataSet}
-          dataSetNames={dataSetNames}
-        />
+        {/* Only show data set navigation in grid view */}
+        {currentView === 'grid' && (
+          <DataSetNavigation
+            currentDataSetIndex={currentDataSetIndex}
+            isManualMode={isManualMode}
+            onToggleMode={onToggleMode}
+            onPreviousDataSet={onPreviousDataSet}
+            onNextDataSet={onNextDataSet}
+            dataSetNames={dataSetNames}
+          />
+        )}
       </ControlsHeader>
 
       {/* Expandable Content */}

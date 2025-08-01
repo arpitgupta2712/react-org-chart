@@ -110,7 +110,7 @@ export const CompanyTitle = styled.h1`
   
   @media (max-width: 768px) {
     font-size: 1.75rem;
-    margin: 0 0 ${sizes.spaceXS} 0;
+    margin: 0 0 ${sizes.spaceLG} ${sizes.spaceSM};
     line-height: 1.2;
   }
   
@@ -134,6 +134,7 @@ export const CompanySubtitle = styled.p`
     font-size: ${sizes.fontBase};
     gap: ${sizes.spaceXS};
     flex-wrap: wrap;
+    margin: 0 0 0 ${sizes.spaceSM};
   }
   
   @media (max-width: 480px) {
