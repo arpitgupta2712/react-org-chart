@@ -53,7 +53,8 @@ const OrgChart: React.FC = () => {
     showingSubordinatesForId,
     handleCardClick,
     resetSelection,
-    getAllSubordinates
+    getAllSubordinates,
+    getDirectSubordinates
   } = useEmployeeSelection(employees)
 
   // Data set navigation for employee cards (only used in grid view)
@@ -174,9 +175,9 @@ const OrgChart: React.FC = () => {
           getManagerName={getManagerName}
           onCardClick={handleCardClick}
           selectedEmployeeId={selectedEmployeeId}
-          highlightedEmployeeId={highlightedEmployeeId}
-          showingSubordinatesForId={showingSubordinatesForId}
-          getAllSubordinates={getAllSubordinates}
+                      highlightedEmployeeId={highlightedEmployeeId}
+            showingSubordinatesForId={showingSubordinatesForId}
+            getDirectSubordinates={getDirectSubordinates}
           searchQuery={searchQuery}
           designationFilter={designationFilter}
           tierFilter={tierFilter}

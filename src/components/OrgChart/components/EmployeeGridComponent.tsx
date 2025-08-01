@@ -13,7 +13,7 @@ interface EmployeeGridComponentProps {
   selectedEmployeeId: string | null
   highlightedEmployeeId: string | null
   showingSubordinatesForId: string | null
-  getAllSubordinates: (employeeId: string) => Set<string>
+  getDirectSubordinates: (employeeId: string) => Set<string>
   searchQuery: string
   designationFilter: string
   tierFilter: number | ''
@@ -29,7 +29,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   selectedEmployeeId,
   highlightedEmployeeId,
   showingSubordinatesForId,
-  getAllSubordinates,
+  getDirectSubordinates,
   searchQuery,
   designationFilter,
   tierFilter,
@@ -50,9 +50,9 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
   return (
     <EmployeeGrid>
       {employees.map(employee => {
-        // Calculate subordinate highlighting logic
-        const subordinates = showingSubordinatesForId ? getAllSubordinates(showingSubordinatesForId) : new Set()
-        const isSubordinate = subordinates.has(employee.id)
+        // Calculate subordinate highlighting logic - only direct reports (+1 tier)
+        const directSubordinates = showingSubordinatesForId ? getDirectSubordinates(showingSubordinatesForId) : new Set()
+        const isDirectSubordinate = directSubordinates.has(employee.id)
         const isManager = showingSubordinatesForId === employee.id
         
         // Determine if card should be dimmed
@@ -62,7 +62,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
         )
         
         const isDimmedBySubordinateView = Boolean(
-          showingSubordinatesForId && !isSubordinate && !isManager
+          showingSubordinatesForId && !isDirectSubordinate && !isManager
         )
         
         return (
@@ -73,7 +73,7 @@ export const EmployeeGridComponent: React.FC<EmployeeGridComponentProps> = ({
             managerName={employee.parentId ? getManagerName(employee.parentId) : undefined}
             onCardClick={onCardClick}
             isSelected={selectedEmployeeId === employee.id}
-            isHighlighted={highlightedEmployeeId === employee.id || isSubordinate}
+            isHighlighted={highlightedEmployeeId === employee.id || isDirectSubordinate}
             isDimmed={isDimmedByFilters || isDimmedBySubordinateView}
             currentDataSetIndex={currentDataSetIndex}
           />

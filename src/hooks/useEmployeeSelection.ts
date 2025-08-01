@@ -8,6 +8,7 @@ export interface UseEmployeeSelectionReturn {
   handleCardClick: (employee: Employee) => void
   resetSelection: () => void
   getAllSubordinates: (employeeId: string) => Set<string>
+  getDirectSubordinates: (employeeId: string) => Set<string>
 }
 
 /**
@@ -18,7 +19,22 @@ export const useEmployeeSelection = (employees: Employee[]): UseEmployeeSelectio
   const [highlightedEmployeeId, setHighlightedEmployeeId] = useState<string | null>(null)
   const [showingSubordinatesForId, setShowingSubordinatesForId] = useState<string | null>(null)
 
-  // Get all subordinates (direct and indirect reports) of an employee
+  // Get direct subordinates (only +1 tier) of an employee for easier tracing
+  const getDirectSubordinates = (employeeId: string): Set<string> => {
+    const subordinates = new Set<string>()
+    const employee = employees.find(emp => emp.id === employeeId)
+    
+    if (!employee) return subordinates
+    
+    // Only add direct children (no recursion)
+    employee.children.forEach(child => {
+      subordinates.add(child.id)
+    })
+    
+    return subordinates
+  }
+
+  // Keep the old function for backward compatibility if needed elsewhere
   const getAllSubordinates = (employeeId: string): Set<string> => {
     const subordinates = new Set<string>()
     const employee = employees.find(emp => emp.id === employeeId)
@@ -65,6 +81,7 @@ export const useEmployeeSelection = (employees: Employee[]): UseEmployeeSelectio
     showingSubordinatesForId,
     handleCardClick,
     resetSelection,
-    getAllSubordinates
+    getAllSubordinates,
+    getDirectSubordinates
   }
 }
