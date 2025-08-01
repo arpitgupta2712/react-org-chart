@@ -64,13 +64,14 @@ export const ViewInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 0.25rem;
+  margin-bottom: 0.5rem;
   
   h3 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: ${design.typography.weightBold};
     color: ${colors.textPrimary};
-    line-height: 1.2;
+    line-height: 1.25;
   }
   
   p {
@@ -78,7 +79,7 @@ export const ViewInfo = styled.div`
     font-size: 0.875rem;
     color: ${colors.textSecondary};
     font-weight: ${design.typography.weightMedium};
-    line-height: 1.1;
+    line-height: 1.25;
   }
 
   .selection-count {
@@ -100,11 +101,11 @@ export const ViewInfo = styled.div`
     gap: 0.2rem;
     
     h3 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
     }
     
     p {
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .selection-count {
