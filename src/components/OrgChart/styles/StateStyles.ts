@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, sizes } from '../../../constants/colors'
+import { colors, sizes } from '../../../constants'
 
 export const LoadingState = styled.div`
   display: flex;

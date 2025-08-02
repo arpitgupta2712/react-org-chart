@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { colors, design } from '../../../constants/colors'
-import { getTierColors } from '../../../constants/colors'
+import { colors, design, getTierColors } from '../../../constants'
 
 export const TierViewContainer = styled.div`
   font-family: ${design.typography.fontFamily};

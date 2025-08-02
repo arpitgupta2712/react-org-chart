@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { sizes, design } from '../../../constants/colors'
+import { sizes, design } from '../../../constants'
 
 export const CardBody = styled.div`
   flex-grow: 1; /* Allow body to take up remaining space */

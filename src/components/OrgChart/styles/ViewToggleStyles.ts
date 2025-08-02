@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, design } from '../../../constants/colors'
+import { colors, design } from '../../../constants'
 
 export const ViewToggleContainer = styled.div`
   display: flex;

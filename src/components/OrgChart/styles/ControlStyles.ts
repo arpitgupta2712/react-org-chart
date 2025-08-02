@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors, sizes, design } from '../../../constants/colors'
+import { colors, sizes, design } from '../../../constants'
 
 export const Controls = styled.div<{ isExpanded: boolean }>`
   background: transparent;

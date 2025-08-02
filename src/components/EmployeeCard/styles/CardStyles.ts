@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { getTierColors } from '../../../constants/colors'
-import { colors, sizes, design } from '../../../constants/colors'
+import { getTierColors, colors, sizes, design } from '../../../constants'
 
 export const StyledEmployeeCard = styled.div<{
   tier: number

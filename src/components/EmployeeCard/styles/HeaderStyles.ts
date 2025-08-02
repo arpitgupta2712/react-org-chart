@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { sizes, design } from '../../../constants/colors'
+import { sizes, design } from '../../../constants'
 
 export const CardHeader = styled.div`
   display: flex;
