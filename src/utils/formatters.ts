@@ -16,3 +16,31 @@ export const formatPhone = (phone: string): string => {
   }
   return phone
 }
+
+/**
+ * Formats currency amounts for display
+ * @param amount - The amount to format (number or string)
+ * @returns Formatted currency string in INR
+ */
+export const formatCurrency = (amount: number | string | null | undefined): string => {
+  if (!amount) return 'Not provided'
+  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(numAmount)
+}
+
+/**
+ * Formats account numbers for secure display
+ * @param accountNumber - The account number to format
+ * @returns Masked account number showing only last 4 digits
+ */
+export const formatAccountNumber = (accountNumber: string | null | undefined): string => {
+  if (!accountNumber) return 'Not provided'
+  const cleanNumber = accountNumber.replace(/\D/g, '')
+  if (cleanNumber.length < 4) return '****'
+  return `****${cleanNumber.slice(-4)}`
+}

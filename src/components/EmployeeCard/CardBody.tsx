@@ -4,10 +4,10 @@ import { RawEmployee } from '../../services/dataLoader'
 import { 
   createEmployeeDataSets,
   DataSet,
-  formatCurrency,
-  formatAccountNumber,
   formatDate
 } from './dataSets'
+import { formatCurrency, formatAccountNumber } from '../../utils/formatters'
+import { TruncatedText as TruncatedTextUtil } from '../../utils/componentUtils'
 import { RelativeTime } from '../common/RelativeTime'
 import {
   CardBody as StyledCardBody,
@@ -35,43 +35,16 @@ interface CardBodyProps {
 
 
 
-// Component for truncated address with tooltip
+// Component for truncated address with tooltip (now using utility)
 const TruncatedAddress: React.FC<{ address: string }> = ({ address }) => {
-  const [showTooltip, setShowTooltip] = useState(false)
-  const maxLength = 25 // Maximum characters to show in truncated view
-
-  const truncatedAddress = address.length > maxLength 
-    ? `${address.slice(0, maxLength)}...` 
-    : address
-
-  const handleCopyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(address)
-      // Could add a temporary "Copied!" indication here
-    } catch (err) {
-      console.warn('Failed to copy to clipboard:', err)
-    }
-  }
-
-  if (address.length <= maxLength) {
-    return <span>{address}</span>
-  }
-
   return (
     <TooltipContainer>
-      <TruncatedText
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-      >
-        {truncatedAddress}
-      </TruncatedText>
-      <Tooltip 
-        visible={showTooltip}
-        onClick={handleCopyToClipboard}
-      >
-        {address}
-        <CopyHint>Click to copy full address</CopyHint>
-      </Tooltip>
+      <TruncatedTextUtil
+        text={address}
+        maxLength={25}
+        showTooltip={true}
+        enableCopy={true}
+      />
     </TooltipContainer>
   )
 }

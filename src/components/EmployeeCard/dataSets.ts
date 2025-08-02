@@ -2,6 +2,8 @@ import React from 'react'
 import { Employee } from '../../types'
 import { RawEmployee } from '../../services/dataLoader'
 import { RelativeTime } from '../common/RelativeTime'
+import { formatCurrency, formatAccountNumber } from '../../utils/formatters'
+import { MissingData, ExecutiveStatus } from '../../utils/componentUtils'
 import { 
   EmailIcon,
   CalendarIcon,
@@ -30,24 +32,7 @@ export interface DataSet {
   }>
 }
 
-// Utility functions for formatting
-export const formatCurrency = (amount: number | string | null | undefined): string => {
-  if (!amount) return 'Not provided'
-  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(numAmount)
-}
-
-export const formatAccountNumber = (accountNumber: string | null | undefined): string => {
-  if (!accountNumber) return 'Not provided'
-  const cleanNumber = accountNumber.replace(/\D/g, '')
-  if (cleanNumber.length < 4) return '****'
-  return `****${cleanNumber.slice(-4)}`
-}
+// Date formatting utility specific to React components
 
 export const formatDate = (dateString: string | null | undefined): React.ReactNode => {
   if (!dateString) return React.createElement('span', { className: 'no-data' }, 'Not provided')
@@ -71,15 +56,7 @@ export const formatRelativeDate = (dateString: string | null | undefined): React
   return React.createElement(RelativeTime, { dateString, showTooltip: true })
 }
 
-// Missing data component placeholder
-export const MissingData: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  React.createElement('span', { className: 'no-data' }, children)
-)
-
-// Executive status component placeholder  
-export const ExecutiveStatus: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  React.createElement('span', { className: 'executive-status' }, children)
-)
+// Component utilities now imported from utils/componentUtils
 
 // Define all employee data sets
 export const createEmployeeDataSets = (showManager: boolean): DataSet[] => [
