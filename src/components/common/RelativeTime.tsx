@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { getRelativeTime, formatRelativeTime } from '../../utils/relativeTime'
-import { formatDate } from '../../utils/formatters'
+import { getRelativeTime, formatRelativeTime, formatDateString } from '../../utils/dateUtils'
 
 export interface RelativeTimeProps {
   dateString: string | null | undefined
@@ -41,7 +40,7 @@ export const RelativeTime: React.FC<RelativeTimeProps> = ({
   }
   
   const tooltipText = showTooltip && dateString ? 
-    `Exact date: ${formatDate(dateString)}` : 
+    `Exact date: ${formatDateString(dateString)}` : 
     undefined
   
   return (

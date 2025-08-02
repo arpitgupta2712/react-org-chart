@@ -9,7 +9,7 @@ import {
   TechStack
 } from './styles.js'
 import { useCurrentTime } from '../../hooks/useCurrentTime'
-import { formatDate, formatTime } from '../../utils/dateTime'
+import { formatDate, formatTime } from '../../utils/dateUtils'
 import { useEmployeeData } from '../../hooks/useEmployeeData'
 
 export const AppHeader: React.FC = () => {

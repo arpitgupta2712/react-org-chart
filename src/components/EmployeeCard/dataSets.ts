@@ -53,6 +53,9 @@ export const formatDate = (dateString: string | null | undefined): React.ReactNo
   if (!dateString) return React.createElement('span', { className: 'no-data' }, 'Not provided')
   try {
     const date = new Date(dateString)
+    if (isNaN(date.getTime())) {
+      return React.createElement('span', { className: 'no-data' }, 'Invalid date')
+    }
     return date.toLocaleDateString('en-US', {
       year: 'numeric', 
       month: 'short',

@@ -1,9 +1,54 @@
+/**
+ * Consolidated date and time utility functions
+ */
+
+// Type definitions
 export interface RelativeTimeResult {
   value: number
   unit: 'year' | 'month' | 'day' | 'today' | 'future'
   text: string
 }
 
+// Date object formatters (for current time display)
+export const formatDate = (date: Date): string => {
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric'
+  })
+}
+
+export const formatTime = (date: Date): string => {
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+
+export const formatDateTime = (date: Date): string => {
+  return date.toLocaleString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+
+// Date string formatters (for employee data)
+export const formatDateString = (dateString: string): string => {
+  if (!dateString) return 'Not specified'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  })
+}
+
+// Relative time functions
 export const getRelativeTime = (dateString: string | null | undefined): RelativeTimeResult | null => {
   if (!dateString) return null
   

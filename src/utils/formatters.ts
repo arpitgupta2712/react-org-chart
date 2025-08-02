@@ -1,5 +1,5 @@
 /**
- * Utility functions for formatting data in the org chart
+ * Utility functions for formatting non-date data in the org chart
  */
 
 /**
@@ -15,19 +15,4 @@ export const formatPhone = (phone: string): string => {
     return `${cleaned.slice(0, 5)} ${cleaned.slice(5)}`
   }
   return phone
-}
-
-/**
- * Formats a date string for display
- * @param dateString - The date string to format
- * @returns Formatted date string or fallback message
- */
-export const formatDate = (dateString: string): string => {
-  if (!dateString) return 'Not specified'
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric' 
-  })
 }
