@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import { useEmployeeData } from '../../hooks/useEmployeeData'
+import React, { useMemo, useState, useCallback } from 'react'
+import { useEmployeeDataContext } from '../../contexts/EmployeeDataContext'
 import { useEmployeeFiltering } from '../../hooks/useEmployeeFiltering'
 import { useEmployeeSelection } from '../../hooks/useEmployeeSelection'
 import { useScreenSize } from '../../hooks/useScreenSize'
@@ -31,7 +31,7 @@ const OrgChart: React.FC = () => {
     error,
     getRawEmployee,
     getManagerName
-  } = useEmployeeData()
+  } = useEmployeeDataContext()
 
   // Filtering and search
   const {
@@ -89,24 +89,24 @@ const OrgChart: React.FC = () => {
 
   // Statistics (removed - redundant with controls data)
 
-  // Calculate employee counts for filter options
+  // Calculate employee counts for filter options - optimized
   const employeeCounts = useMemo(() => {
-    const counts: Record<string, number> = {}
+    const counts = new Map<string, number>()
     employees.forEach(emp => {
-      counts[emp.position] = (counts[emp.position] || 0) + 1
+      counts.set(emp.position, (counts.get(emp.position) || 0) + 1)
     })
-    return counts
+    return Object.fromEntries(counts)
   }, [employees])
 
-  // Reset handler
-  const handleReset = () => {
+  // Reset handler - memoized to prevent unnecessary re-renders
+  const handleReset = useCallback(() => {
     resetFilters()
     resetSelection()
     console.log('🔄 View reset')
-  }
+  }, [resetFilters, resetSelection])
 
-  // View change handler
-  const handleViewChange = (newView: ViewMode) => {
+  // View change handler - memoized to prevent unnecessary re-renders
+  const handleViewChange = useCallback((newView: ViewMode) => {
     setViewMode(newView)
     // Reset some states when switching views
     if (newView === 'tier') {
@@ -114,7 +114,7 @@ const OrgChart: React.FC = () => {
       setIsManualMode(false)
       setCurrentDataSetIndex(0)
     }
-  }
+  }, [])
 
   // Render loading state
   if (loading) {

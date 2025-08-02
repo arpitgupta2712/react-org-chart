@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Employee, getHierarchyLabel } from '../types'
 import { RawEmployee } from '../services/dataLoader'
+import { useDebounce } from './useDebounce'
+import { createEmployeeSearchMatcher, createEmployeeSorter } from '../utils/employeeUtils'
 
 export type SortOption = 'date' | 'name'
 
@@ -20,7 +22,8 @@ export interface UseEmployeeFilteringReturn {
 }
 
 /**
- * Custom hook for managing employee filtering and search functionality
+ * Optimized custom hook for managing employee filtering and search functionality
+ * Features: debounced search, cached computations, optimized sorting
  */
 export const useEmployeeFiltering = (
   employees: Employee[],
@@ -31,31 +34,50 @@ export const useEmployeeFiltering = (
   const [tierFilter, setTierFilter] = useState<number | ''>('')
   const [sortBy, setSortBy] = useState<SortOption>('date')
 
-  // Get unique designations for filter
+  // Debounce search query to reduce filtering frequency
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
+
+  // Memoized raw employee lookup map for better performance
+  const rawEmployeeMap = useMemo(() => {
+    return new Map(rawEmployees.map(raw => [raw.employee_id, raw]))
+  }, [rawEmployees])
+
+  // Get unique designations for filter - memoized
   const designations = useMemo(() => {
-    const unique = [...new Set(employees.map(emp => emp.position))].sort()
-    return unique
+    return [...new Set(employees.map(emp => emp.position))].sort()
   }, [employees])
 
-  // Get unique tiers with labels and counts for filter
+  // Get unique tiers with labels and counts for filter - optimized
   const tiers = useMemo(() => {
-    const tierCounts = employees.reduce((acc, emp) => {
-      acc[emp.tier] = (acc[emp.tier] || 0) + 1
-      return acc
-    }, {} as Record<number, number>)
+    const tierCounts = new Map<number, number>()
+    const tierSet = new Set<number>()
+    
+    // Single pass to collect both unique tiers and counts
+    employees.forEach(emp => {
+      tierSet.add(emp.tier)
+      tierCounts.set(emp.tier, (tierCounts.get(emp.tier) || 0) + 1)
+    })
 
-    const unique = [...new Set(employees.map(emp => emp.tier))]
+    return Array.from(tierSet)
       .sort((a, b) => a - b)
       .map(tier => ({
         tier,
         label: getHierarchyLabel(tier),
-        count: tierCounts[tier] || 0
+        count: tierCounts.get(tier) || 0
       }))
-    
-    return unique
   }, [employees])
 
-  // Filter and sort employees based on search, designation, tier, and sort option
+  // Create optimized search matcher - memoized
+  const searchMatcher = useMemo(() => {
+    return createEmployeeSearchMatcher(debouncedSearchQuery)
+  }, [debouncedSearchQuery])
+
+  // Create optimized sorter - memoized  
+  const sorter = useMemo(() => {
+    return createEmployeeSorter(sortBy, rawEmployees)
+  }, [sortBy, rawEmployees])
+
+  // Filter and sort employees with optimized performance
   const filteredEmployees = useMemo(() => {
     let filtered = employees
 
@@ -69,62 +91,33 @@ export const useEmployeeFiltering = (
       filtered = filtered.filter(emp => emp.tier === tierFilter)
     }
 
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
+    // Apply optimized search filter with debouncing
+    if (debouncedSearchQuery.trim()) {
       filtered = filtered.filter(emp => {
-        const rawEmp = rawEmployees.find(raw => raw.employee_id === emp.id)
-        return (
-          emp.name.toLowerCase().includes(query) ||
-          emp.position.toLowerCase().includes(query) ||
-          emp.id.toLowerCase().includes(query) ||
-          rawEmp?.company_id.toLowerCase().includes(query) ||
-          rawEmp?.phone?.toLowerCase().includes(query) ||
-          getHierarchyLabel(emp.tier).toLowerCase().includes(query)
-        )
+        const rawEmp = rawEmployeeMap.get(emp.id)
+        return searchMatcher(emp, rawEmp)
       })
     }
 
-    // Apply sorting
-    filtered = [...filtered].sort((a, b) => {
-      if (sortBy === 'name') {
-        return a.name.localeCompare(b.name)
-      } else {
-        // Sort by joining date (newest first, null values at top)
-        const rawA = rawEmployees.find(raw => raw.employee_id === a.id)
-        const rawB = rawEmployees.find(raw => raw.employee_id === b.id)
-        
-        const dateStringA = rawA?.date_of_joining
-        const dateStringB = rawB?.date_of_joining
-        
-        // Handle null/undefined dates - put them at the top for admin attention
-        if (!dateStringA && !dateStringB) return 0
-        if (!dateStringA) return -1  // A goes first (top)
-        if (!dateStringB) return 1   // B goes first (top)
-        
-        // Parse dates properly
-        const dateA = new Date(dateStringA)
-        const dateB = new Date(dateStringB)
-        
-        // Handle invalid dates
-        if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0
-        if (isNaN(dateA.getTime())) return -1  // Invalid A goes to top
-        if (isNaN(dateB.getTime())) return 1   // Invalid B goes to top
-        
-        // Sort valid dates newest first (reverse chronological)
-        return dateB.getTime() - dateA.getTime()
-      }
-    })
+    // Apply optimized sorting
+    return [...filtered].sort(sorter)
+  }, [
+    employees, 
+    designationFilter, 
+    tierFilter, 
+    debouncedSearchQuery, 
+    searchMatcher, 
+    sorter, 
+    rawEmployeeMap
+  ])
 
-    return filtered
-  }, [employees, rawEmployees, searchQuery, designationFilter, tierFilter, sortBy])
-
-  const resetFilters = () => {
+  // Memoized reset function to prevent unnecessary re-renders
+  const resetFilters = useCallback(() => {
     setSearchQuery('')
     setDesignationFilter('')
     setTierFilter('')
     setSortBy('date')
-  }
+  }, [])
 
   return {
     searchQuery,

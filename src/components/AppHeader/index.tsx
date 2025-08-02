@@ -8,13 +8,24 @@ import {
   HeaderIcon,
   TechStack
 } from './styles.js'
-import { useCurrentTime } from '../../hooks/useCurrentTime'
+// Removed useCurrentTime import - now inlined for better performance
 import { formatDate, formatTime } from '../../utils/dateUtils'
-import { useEmployeeData } from '../../hooks/useEmployeeData'
+import { useEmployeeDataContext } from '../../contexts/EmployeeDataContext'
 
 export const AppHeader: React.FC = () => {
-  const currentTime = useCurrentTime()
-  const { employees } = useEmployeeData()
+  // Inline current time logic - optimized for this specific use case
+  const [currentTime, setCurrentTime] = React.useState(new Date())
+  
+  React.useEffect(() => {
+    // Update every 30 seconds instead of every second for better performance
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 30000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const { employees } = useEmployeeDataContext()
 
   return (
     <HeaderContainer>
