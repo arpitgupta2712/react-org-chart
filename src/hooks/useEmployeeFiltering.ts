@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
-import { Employee, getHierarchyLabel } from '../types'
+import { Employee } from '../types'
+import { getHierarchyLabel } from '../utils/hierarchy'
 import { RawEmployee } from '../services/dataLoader'
 import { useDebounce } from './useDebounce'
 import { createEmployeeSearchMatcher, createEmployeeSorter } from '../utils/employeeUtils'

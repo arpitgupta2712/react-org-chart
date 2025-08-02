@@ -1,19 +1,59 @@
 import React from 'react'
+import styled from 'styled-components'
 import OrgChart from './components/OrgChart'
 import { AppHeader } from './components/AppHeader'
 import { EmployeeDataProvider } from './contexts/EmployeeDataContext'
-import './App.css'
+import { colors, design } from './constants'
+
+const AppContainer = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+`
+
+const MainContent = styled.main`
+  flex: 1;
+  margin: 0 1.5rem 1.5rem;
+  background: ${colors.cardBackground};
+  border-radius: 1rem;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.15),
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  /* Subtle pattern overlay matching other components */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  @media (max-width: ${design.breakpoints.md}) {
+    margin: 0 1rem 1rem;
+  }
+`
 
 function App() {
   return (
     <EmployeeDataProvider>
-      <div className="app">
+      <AppContainer>
         <AppHeader />
-        
-        <main className="main-content">
+        <MainContent>
           <OrgChart />
-        </main>
-      </div>
+        </MainContent>
+      </AppContainer>
     </EmployeeDataProvider>
   )
 }

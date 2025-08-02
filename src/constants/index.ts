@@ -41,7 +41,13 @@ export {
   styled
 } from './utilities'
 
+// 🏢 Hierarchy utilities
+export { getHierarchyLabel } from '../utils/hierarchy'
+
 // 📱 Media queries are exported as breakpoints for backward compatibility
+
+// 🏢 Org chart configuration
+export { ORG_CHART_CONFIG } from './orgChart'
 
 // Re-export default theme
 export { default } from './theme'

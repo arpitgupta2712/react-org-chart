@@ -1,7 +1,8 @@
 /**
  * Utility functions for employee data processing and optimization
  */
-import { Employee, getHierarchyLabel } from '../types'
+import { Employee } from '../types'
+import { getHierarchyLabel } from './hierarchy'
 import { RawEmployee } from '../services/dataLoader'
 
 // Cache for parsed dates to avoid repeated parsing

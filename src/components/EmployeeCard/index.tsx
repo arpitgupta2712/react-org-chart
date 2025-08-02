@@ -1,5 +1,6 @@
 import React from 'react'
-import { Employee, getHierarchyLabel } from '../../types'
+import { Employee } from '../../types'
+import { getHierarchyLabel } from '../../utils/hierarchy'
 import { RawEmployee } from '../../services/dataLoader'
 import { CardHeader } from './CardHeader'
 import { CardBody } from './CardBody'
